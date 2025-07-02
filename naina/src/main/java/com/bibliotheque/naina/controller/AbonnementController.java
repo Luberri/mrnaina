@@ -36,12 +36,16 @@ public class AbonnementController {
             model.addAttribute("error", "Adhérent introuvable.");
         } else {
             try {
-                Abonnement abonnement = new Abonnement();
-                abonnement.setAdherent(adherent);
-                abonnementService.save(abonnement);
-                model.addAttribute("message", "Abonnement créé avec succès !");
+                // Utilisation de la méthode de service
+                if (abonnementService.estAbonneCeMois(adherentId)) {
+                    model.addAttribute("error", "Cet adhérent a déjà payé pour ce mois.");
+                } else {
+                    Abonnement abonnement = new Abonnement();
+                    abonnement.setAdherent(adherent);
+                    abonnementService.save(abonnement);
+                    model.addAttribute("message", "Abonnement créé avec succès !");
+                }
             } catch (Exception e) {
-                // Récupère le message de l’exception SQL
                 model.addAttribute("error", e.getMessage());
             }
         }

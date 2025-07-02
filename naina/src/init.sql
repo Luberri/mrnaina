@@ -1,3 +1,5 @@
+\c postgres;
+DROP DATABASE IF EXISTS bibliotheque_naina;
 CREATE DATABASE bibliotheque_naina;
 \c bibliotheque_naina;
 
@@ -51,6 +53,8 @@ CREATE TABLE mode (
     id SERIAL PRIMARY KEY,
     nom VARCHAR(50) NOT NULL UNIQUE
 );
+INSERT INTO mode (nom) VALUES ('a domicile');
+INSERT INTO mode (nom) VALUES ('sur place');
 
 -- Prêt d’un exemplaire à un adhérent
 CREATE TABLE pret (

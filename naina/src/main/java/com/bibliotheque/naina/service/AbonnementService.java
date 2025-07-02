@@ -5,6 +5,7 @@ import com.bibliotheque.naina.repository.AbonnementRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,5 +29,14 @@ public class AbonnementService {
 
     public void deleteById(Long id) {
         abonnementRepository.deleteById(id);
+    }
+
+    // Nouvelle méthode pour vérifier l'abonnement du mois courant
+    public boolean estAbonneCeMois(Long adherentId) {
+        LocalDate now = LocalDate.now();
+        return abonnementRepository.findAll().stream()
+            .anyMatch(a -> a.getAdherent().getId().equals(adherentId)
+                && a.getDate().getYear() == now.getYear()
+                && a.getDate().getMonthValue() == now.getMonthValue());
     }
 }
