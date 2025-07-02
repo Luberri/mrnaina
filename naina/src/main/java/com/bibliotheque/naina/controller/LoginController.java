@@ -21,8 +21,9 @@ public class LoginController {
     private AdherentService adherentService;
 
     @GetMapping("/login")
-    public String showLoginForm() {
-        return "login";
+    public String showLoginForm(Model model) {
+        model.addAttribute("body", "login.jsp");
+        return "layout";
     }
 
     @PostMapping("/login")
@@ -30,7 +31,8 @@ public class LoginController {
         var adherent = adherentService.findByNom(nom);
         if (adherent == null) {
             model.addAttribute("error", "Nom inconnu. Veuillez réessayer.");
-            return "login";
+            model.addAttribute("body", "login.jsp");
+            return "layout";
         }
         session.setAttribute("nom", nom);
         session.setAttribute("adherentId", adherent.getId());
@@ -49,8 +51,9 @@ public class LoginController {
     }
 
     @GetMapping("/login-admin")
-    public String showAdminLoginForm() {
-        return "login_admin";
+    public String showAdminLoginForm(Model model) {
+        model.addAttribute("body", "login_admin.jsp");
+        return "layout";
     }
 
     @PostMapping("/login-admin")
@@ -59,7 +62,8 @@ public class LoginController {
         // Vérifie que l'adhérent existe et a le rôle id=1
         if (adherent == null || adherent.getRole() == null || adherent.getRole().getId() != 1L || !"1234".equals(mdp)) {
             model.addAttribute("error", "Nom ou mot de passe incorrect ou accès non autorisé.");
-            return "login_admin";
+            model.addAttribute("body", "login_admin.jsp");
+            return "layout";
         }
         session.setAttribute("admin", true);
         session.setAttribute("adminNom", nom);
@@ -67,11 +71,12 @@ public class LoginController {
     }
 
     @GetMapping("/admin")
-    public String adminPage(HttpSession session) {
+    public String adminPage(HttpSession session, Model model) {
         // Optionnel : vérifier que l'utilisateur est bien admin
         if (session.getAttribute("admin") == null) {
             return "redirect:/login-admin";
         }
-        return "admin";
+        model.addAttribute("body", "admin.jsp");
+        return "layout";
     }
 }

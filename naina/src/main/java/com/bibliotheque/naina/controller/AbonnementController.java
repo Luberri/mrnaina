@@ -26,7 +26,8 @@ public class AbonnementController {
     public String showAbonnementForm(Model model) {
         model.addAttribute("adherents", adherentService.findAll());
         model.addAttribute("abonnementTarifs", abonnementTarifService.findAll());
-        return "abonnement_nouveau";
+        model.addAttribute("body", "abonnement_nouveau.jsp");
+        return "layout";
     }
 
     @PostMapping("/abonnement/nouveau")
@@ -36,7 +37,6 @@ public class AbonnementController {
             model.addAttribute("error", "Adhérent introuvable.");
         } else {
             try {
-                // Utilisation de la méthode de service
                 if (abonnementService.estAbonneCeMois(adherentId)) {
                     model.addAttribute("error", "Cet adhérent a déjà payé pour ce mois.");
                 } else {
@@ -51,6 +51,7 @@ public class AbonnementController {
         }
         model.addAttribute("adherents", adherentService.findAll());
         model.addAttribute("abonnementTarifs", abonnementTarifService.findAll());
-        return "abonnement_nouveau";
+        model.addAttribute("body", "abonnement_nouveau.jsp");
+        return "layout";
     }
 }

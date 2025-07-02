@@ -24,7 +24,8 @@ public class AdherentController {
     @GetMapping("/adherents")
     public String listeAdherents(Model model) {
         model.addAttribute("adherents", adherentService.findAll());
-        return "adherents";
+        model.addAttribute("body", "adherents.jsp");
+        return "layout";
     }
 
     @GetMapping("/adherents/nouveau")
@@ -35,7 +36,8 @@ public class AdherentController {
             .filter(role -> role.getId() != 5L)
             .collect(Collectors.toList());
         model.addAttribute("roles", rolesSansAnonyme);
-        return "adherent_nouveau";
+        model.addAttribute("body", "adherent_nouveau.jsp");
+        return "layout";
     }
 
     @PostMapping("/adherents/nouveau")
@@ -52,6 +54,7 @@ public class AdherentController {
         adherentService.save(adherent);
         model.addAttribute("message", "Adhérent ajouté avec succès !");
         model.addAttribute("adherents", adherentService.findAll());
-        return "adherents";
+        model.addAttribute("body", "adherents.jsp");
+        return "layout";
     }
 }

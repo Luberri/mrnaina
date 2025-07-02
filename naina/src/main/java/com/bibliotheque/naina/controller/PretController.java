@@ -30,7 +30,8 @@ public class PretController {
     @GetMapping("/prets")
     public String listePrets(Model model) {
         model.addAttribute("prets", pretService.findAll());
-        return "pret_list";
+        model.addAttribute("body", "pret_list.jsp");
+        return "layout";
     }
 
     @GetMapping("/prets/nouveau")
@@ -38,7 +39,8 @@ public class PretController {
         model.addAttribute("adherents", adherentService.findAll());
         model.addAttribute("exemplaires", exemplaireService.findAll());
         model.addAttribute("modes", modeService.findAll());
-        return "pret_form";
+        model.addAttribute("body", "pret_form.jsp");
+        return "layout";
     }
 
     @PostMapping("/prets/nouveau")
@@ -69,6 +71,7 @@ public class PretController {
         model.addAttribute("adherents", adherentService.findAll());
         model.addAttribute("exemplaires", exemplaireService.findAll());
         model.addAttribute("modes", modeService.findAll());
-        return "pret_form";
+        model.addAttribute("body", "pret_form.jsp");
+        return "layout";
     }
 }
