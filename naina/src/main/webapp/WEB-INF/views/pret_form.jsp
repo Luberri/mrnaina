@@ -44,7 +44,7 @@
         <label>Exemplaire :</label>
         <select name="exemplaireId" required>
             <c:forEach var="ex" items="${exemplaires}">
-                <option value="${ex.id}">${ex.livre.titre} (dispo: ${ex.nombreDispo})</option>
+                <option value="${ex.id}">${ex.livre.titre} (dispo: ${disponibilites[ex.id]})</option>
             </c:forEach>
         </select><br>
         <label>Mode :</label>
@@ -53,6 +53,7 @@
                 <option value="${mode.id}">${mode.nom}</option>
             </c:forEach>
         </select><br>
+
         <button type="submit">Valider</button>
     </form>
     <script>

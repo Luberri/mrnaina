@@ -28,5 +28,10 @@
         </c:forEach>
     </table>
     <a href="${pageContext.request.contextPath}/prets/nouveau">Nouveau prêt</a>
+    <select>
+        <c:forEach var="ex" items="${exemplaires}">
+            <option value="${ex.id}">${ex.livre.titre} (dispo: ${disponibilites[ex.id]})</option>
+        </c:forEach>
+    </select>
 </body>
 </html>
