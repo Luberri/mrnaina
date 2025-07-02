@@ -98,6 +98,11 @@ CREATE TABLE reservation_role (
     role_id INT NOT NULL REFERENCES role(id),
     nombre_livre_max INT NOT NULL CHECK (nombre_livre_max >= 0)
 );
+CREATE TABLE pret_role (
+    id SERIAL PRIMARY KEY,
+    role_id INT NOT NULL REFERENCES role(id),
+    nombre_livre_max INT NOT NULL CHECK (nombre_livre_max >= 0)
+);
 
 CREATE OR REPLACE VIEW nombre_exemplaires_disponibles AS
 SELECT
