@@ -48,24 +48,37 @@ public class PretController {
             @RequestParam Long adherentId,
             @RequestParam Long exemplaireId,
             @RequestParam Long modeId,
-            @RequestParam String dateRetour,
             Model model
     ) {
-        String erreur = pretService.verifierPret(adherentId);
-        if (erreur != null) {
-            model.addAttribute("error", erreur);
+        Adherent adherent = adherentService.findById(adherentId).orElse(null);
+        Mode mode = modeService.findById(modeId).orElse(null);
+
+        // Règle : anonyme (role_id=5) ne peut pas faire de prêt à domicile (mode_id=1)
+        if (adherent != null && mode != null && adherent.getRole().getId() == 5L && mode.getId() == 1L) {
+            model.addAttribute("error", "Un adhérent anonyme ne peut pas emprunter à domicile.");
         } else {
-            try {
-                Pret pret = new Pret();
-                pret.setAdherent(adherentService.findById(adherentId).orElse(null));
-                pret.setExemplaire(exemplaireService.findById(exemplaireId).orElse(null));
-                pret.setMode(modeService.findById(modeId).orElse(null));
-                pret.setDateRetour(LocalDate.parse(dateRetour));
-                pret.setRendu(false);
-                pretService.save(pret);
-                model.addAttribute("message", "Prêt enregistré !");
-            } catch (Exception e) {
-                model.addAttribute("error", "Erreur lors de l'enregistrement du prêt.");
+            String erreur = pretService.verifierPret(adherentId);
+            if (erreur != null) {
+                model.addAttribute("error", erreur);
+            } else {
+                try {
+                    // Récupère le nombre de jours pour ce rôle
+                    Integer nombreJour = pretService.getNombreJourPourRole(adherent.getRole().getId());
+                    if (nombreJour == null) {
+                        model.addAttribute("error", "Aucune durée de prêt définie pour ce rôle.");
+                    } else {
+                        Pret pret = new Pret();
+                        pret.setAdherent(adherent);
+                        pret.setExemplaire(exemplaireService.findById(exemplaireId).orElse(null));
+                        pret.setMode(mode);
+                        pret.setDateRetour(LocalDate.now().plusDays(nombreJour));
+                        pret.setRendu(false);
+                        pretService.save(pret);
+                        model.addAttribute("message", "ok , a rendre avant le "+LocalDate.now().plusDays(nombreJour+1));
+                    }
+                } catch (Exception e) {
+                    model.addAttribute("error", "Erreur lors de l'enregistrement du prêt.");
+                }
             }
         }
         model.addAttribute("adherents", adherentService.findAll());

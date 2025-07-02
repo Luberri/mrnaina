@@ -21,6 +21,8 @@ public class PretService {
     private AbonnementService abonnementService;
     @Autowired
     private PretRoleService pretRoleService;
+    @Autowired
+    private PretJourService pretJourService;
 
     public List<Pret> findAll() {
         return pretRepository.findAll();
@@ -63,5 +65,13 @@ public class PretService {
             return "Nombre maximum de prêts atteint pour cet adhérent.";
         }
         return null; // OK
+    }
+
+    public Integer getNombreJourPourRole(Long roleId) {
+        return pretJourService.findAll().stream()
+                .filter(pj -> pj.getRole().getId().equals(roleId))
+                .map(pj -> pj.getNombreJour())
+                .findFirst()
+                .orElse(null);
     }
 }

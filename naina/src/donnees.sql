@@ -56,3 +56,11 @@ INSERT INTO pret_role (role_id, nombre_livre_max) VALUES (2, 5); -- Par exemple,
 INSERT INTO pret_role (role_id, nombre_livre_max) VALUES (3, 8); -- Par exemple, rôle 3 : 1 livre max
 INSERT INTO pret_role (role_id, nombre_livre_max) VALUES (4, 12); -- Par exemple, rôle 3 : 1 livre max
 INSERT INTO pret_role (role_id, nombre_livre_max) VALUES (5, 15); -- Par exemple, rôle 3 : 1 livre max
+
+-- Données de test pour pret_jour
+INSERT INTO pret_jour (role_id, nombre_jour) VALUES (2, 10); 
+INSERT INTO pret_jour (role_id, nombre_jour) VALUES (3, 15); 
+INSERT INTO pret_jour (role_id, nombre_jour) VALUES (4, 22);   
+INSERT INTO adherent (nom, role_id, date_naissance) VALUES (
+    'Anonymous', 5, '1990-06-20'
+);

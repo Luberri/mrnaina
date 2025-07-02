@@ -53,8 +53,6 @@
                 <option value="${mode.id}">${mode.nom}</option>
             </c:forEach>
         </select><br>
-        <label>Date retour :</label>
-        <input type="date" name="dateRetour" required><br>
         <button type="submit">Valider</button>
     </form>
     <script>
@@ -94,12 +92,7 @@
             if (e.target !== input) autocompleteList.innerHTML = '';
         });
     </script>
-    <c:if test="${not empty message}">
-        <div style="color:green">${message}</div>
-    </c:if>
-    <c:if test="${not empty error}">
-        <div style="color:red">${error}</div>
-    </c:if>
+
     <a href="${pageContext.request.contextPath}/prets">Retour à la liste des prêts</a>
 </body>
 </html>

@@ -166,6 +166,9 @@
             border-color: #00a8ff;
             box-shadow: 0 0 5px rgba(0, 168, 255, 0.3);
         }
+        button {
+            margin:20px 0px 20px 0px;
+        }
         input[type="submit"], input[type="button"], button {
             background-color: #00a8ff;
             color: #ffffff;
@@ -184,6 +187,7 @@
             display: block;
             font-weight: 500;
             margin-bottom: 8px;
+            margin-top: 8px;
             color: #2d3436;
         }
         .form-group {
@@ -209,6 +213,7 @@
             font-weight: 600;
             color: #2d3436;
         }
+
         tr:hover {
             background-color: #f8f9fa;
         }

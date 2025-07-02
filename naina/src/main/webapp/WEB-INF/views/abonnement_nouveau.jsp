@@ -103,9 +103,7 @@
             }
         }
     </script>
-    <c:if test="${not empty message}">
-        <div style="color:green">${message}</div>
-    </c:if>
+
     <p><a href="${pageContext.request.contextPath}/admin">Retour admin</a></p>
 </body>
 </html>
