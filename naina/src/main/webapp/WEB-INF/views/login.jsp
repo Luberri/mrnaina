@@ -1,0 +1,21 @@
+<!-- filepath: src/main/webapp/WEB-INF/views/login.jsp -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+</head>
+<body>
+    <h2>Connexion</h2>
+    <form action="${pageContext.request.contextPath}/login" method="post">
+        <label for="nom">Nom :</label>
+        <input type="text" id="nom" name="nom" required>
+        <button type="submit">Se connecter</button>
+    </form>
+    <c:if test="${not empty error}">
+        <div style="color:red">${error}</div>
+    </c:if>
+    <p>
+        <a href="${pageContext.request.contextPath}/login-admin">Connexion admin</a>
+    </p>
+</body>
+</html>
