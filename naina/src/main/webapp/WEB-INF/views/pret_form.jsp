@@ -30,7 +30,7 @@
             </c:forEach>
         </select><br>
 
-        <button type="submit">Valider</button>
+        <button class="btn" type="submit">Valider</button>
     </form>
     <script>
         // Adhérents

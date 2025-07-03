@@ -70,11 +70,13 @@ public class LoginController {
     }
 
     @GetMapping("/admin")
-    public String adminPage(HttpSession session) {
+    public String adminPage(HttpSession session,Model model) {
         // Optionnel : vérifier que l'utilisateur est bien admin
         if (session.getAttribute("admin") == null) {
             return "redirect:/login-admin";
         }
+        model.addAttribute("body", "livres.jsp");
+        
         return "layout";
     }
 }

@@ -1,12 +1,15 @@
 <!-- filepath: d:\S4\optim-Aina\mrnaina\naina\src\main\webapp\WEB-INF\views\reservation_form.jsp -->
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%
+    com.bibliotheque.naina.model.Adherent adherent = (com.bibliotheque.naina.model.Adherent) session.getAttribute("adherent");
+%>
 <h2>Nouvelle réservation</h2>
 <form action="${pageContext.request.contextPath}/reservations/nouveau" method="post" autocomplete="off">
     <div style="position:relative;">
         <label>Adhérent :</label>
-        <input id="adherentNom" type="text" name="adherentNom" required placeholder="Tapez le nom...">
-        <input type="hidden" name="adherentId" id="adherentId">
+        <input id="adherentNom" type="text" name="adherentNom" required placeholder="Tapez le nom..." value="<%= adherent.getNom() %>">
+        <input type="hidden" name="adherentId" id="adherentId" value=<%= adherent.getId() %>>
         <div id="adherent-autocomplete-list" class="autocomplete-items"></div>
     </div>
     <br>
@@ -19,7 +22,10 @@
         </c:forEach>
     </select>
     <br>
-    <button type="submit">Réserver</button>
+    <label for="dateReservation">Date de réservation :</label>
+    <input type="date" id="dateReservation" name="dateReservation" required>
+    <br>
+    <button class="btn" type="submit">Réserver</button>
 </form>
 
 <script>

@@ -1,7 +1,8 @@
+-- Connexion
 \c postgres;
-DROP DATABASE IF EXISTS bibliotheque_naina;
-CREATE DATABASE bibliotheque_naina;
-\c bibliotheque_naina;
+DROP DATABASE IF EXISTS bibliotheque_naina1;
+CREATE DATABASE bibliotheque_naina1;
+\c bibliotheque_naina1;
 
 -- Table des rôles
 CREATE TABLE role (
@@ -13,7 +14,7 @@ CREATE TABLE role (
 CREATE TABLE adherent (
     id SERIAL PRIMARY KEY,
     nom VARCHAR(100) NOT NULL,
-    role_id INT NOT NULL REFERENCES role(id),
+    role_id INT NOT NULL REFERENCES role(id) ON DELETE CASCADE,
     date_naissance DATE NOT NULL
 );
 
@@ -23,7 +24,7 @@ CREATE TABLE categorie (
     nom VARCHAR(100) NOT NULL UNIQUE
 );
 
--- Livres (logique) - Suppression de categorie_id
+-- Livres
 CREATE TABLE livre (
     id SERIAL PRIMARY KEY,
     titre VARCHAR(255) NOT NULL,
@@ -32,86 +33,92 @@ CREATE TABLE livre (
     annee_publication INT
 );
 
--- Table d'association Many-to-Many entre Livre et Categorie
+-- Association Livre <-> Catégorie (Many-to-Many)
 CREATE TABLE livre_categorie (
-    livre_id INTEGER NOT NULL,
-    categorie_id INTEGER NOT NULL,
+    livre_id INT NOT NULL,
+    categorie_id INT NOT NULL,
     PRIMARY KEY (livre_id, categorie_id),
-    FOREIGN KEY (livre_id) REFERENCES livre(id),
-    FOREIGN KEY (categorie_id) REFERENCES categorie(id)
+    FOREIGN KEY (livre_id) REFERENCES livre(id) ON DELETE CASCADE,
+    FOREIGN KEY (categorie_id) REFERENCES categorie(id) ON DELETE CASCADE
 );
 
--- Exemplaires disponibles (inventaire)
+-- Exemplaires
 CREATE TABLE exemplaire (
     id SERIAL PRIMARY KEY,
-    livre_id INT NOT NULL REFERENCES livre(id),
+    livre_id INT NOT NULL REFERENCES livre(id) ON DELETE CASCADE,
     nombre_dispo INT DEFAULT 0 CHECK (nombre_dispo >= 0)
 );
-
--- Mode de prêt (à domicile / sur place)
+ALTER TABLE exemplaire ADD COLUMN etat VARCHAR(50);
+-- Modes de prêt
 CREATE TABLE mode (
     id SERIAL PRIMARY KEY,
     nom VARCHAR(50) NOT NULL UNIQUE
 );
-INSERT INTO mode (nom) VALUES ('a domicile');
-INSERT INTO mode (nom) VALUES ('sur place');
+INSERT INTO mode (nom) VALUES ('a domicile'), ('sur place');
 
--- Prêt d’un exemplaire à un adhérent
+-- Prêts
 CREATE TABLE pret (
     id SERIAL PRIMARY KEY,
-    exemplaire_id INT NOT NULL REFERENCES exemplaire(id),
-    adherent_id INT NOT NULL REFERENCES adherent(id),
-    mode_id INT NOT NULL REFERENCES mode(id),
+    exemplaire_id INT NOT NULL REFERENCES exemplaire(id) ON DELETE CASCADE,
+    adherent_id INT NOT NULL REFERENCES adherent(id) ON DELETE CASCADE,
+    mode_id INT NOT NULL REFERENCES mode(id) ON DELETE SET NULL,
     date_retour DATE NOT NULL,
     date_retour_reel DATE,
     rendu BOOLEAN DEFAULT FALSE
 );
 
--- Durée max de prêt selon rôle
+-- Durée max de prêt par rôle
 CREATE TABLE pret_jour (
     id SERIAL PRIMARY KEY,
-    role_id INT NOT NULL REFERENCES role(id),
+    role_id INT NOT NULL REFERENCES role(id) ON DELETE CASCADE,
     nombre_jour INT NOT NULL CHECK (nombre_jour > 0)
 );
 
--- Abonnement annuel des adhérents
+-- Abonnement des adhérents
 CREATE TABLE abonnement (
     id SERIAL PRIMARY KEY,
-    adherent_id INT NOT NULL REFERENCES adherent(id),
+    adherent_id INT NOT NULL REFERENCES adherent(id) ON DELETE CASCADE,
     date DATE DEFAULT CURRENT_DATE
 );
 
--- Tarif d'abonnement par rôle
+-- Tarification abonnement par rôle
 CREATE TABLE abonnement_tarif (
     id SERIAL PRIMARY KEY,
-    role_id INT NOT NULL REFERENCES role(id),
+    role_id INT NOT NULL REFERENCES role(id) ON DELETE CASCADE,
     prix DECIMAL(10,2) NOT NULL CHECK (prix >= 0)
 );
 
--- Réservation d’un livre par un adhérent
+-- Réservation
 CREATE TABLE reservation (
     id SERIAL PRIMARY KEY,
-    adherent_id INT NOT NULL REFERENCES adherent(id),
-    livre_id INT NOT NULL REFERENCES livre(id),
+    adherent_id INT NOT NULL REFERENCES adherent(id) ON DELETE CASCADE,
+    livre_id INT NOT NULL REFERENCES livre(id) ON DELETE CASCADE,
     date_reservation DATE DEFAULT CURRENT_DATE
 );
 
--- Limite de réservations autorisées selon le rôle
+-- Limites de réservation par rôle
 CREATE TABLE reservation_role (
     id SERIAL PRIMARY KEY,
-    role_id INT NOT NULL REFERENCES role(id),
+    role_id INT NOT NULL REFERENCES role(id) ON DELETE CASCADE,
     nombre_livre_max INT NOT NULL CHECK (nombre_livre_max >= 0)
 );
+
+-- Limites de prêt par rôle
 CREATE TABLE pret_role (
     id SERIAL PRIMARY KEY,
-    role_id INT NOT NULL REFERENCES role(id),
+    role_id INT NOT NULL REFERENCES role(id) ON DELETE CASCADE,
     nombre_livre_max INT NOT NULL CHECK (nombre_livre_max >= 0)
 );
+
+-- Suivi des états de réservation
 CREATE TABLE reservation_status(
     id SERIAL PRIMARY KEY,
-    etat VARCHAR(30), -- 'en attente', 'confirmée', 'annulée'
+    reservation_id INT NOT NULL REFERENCES reservation(id) ON DELETE CASCADE,
+    etat VARCHAR(30) NOT NULL CHECK (etat IN ('en attente', 'confirmee', 'annulee')),
     date DATE DEFAULT CURRENT_DATE
-)
+);
+
+-- Vue sur les exemplaires disponibles
 CREATE OR REPLACE VIEW nombre_exemplaires_disponibles AS
 SELECT
     l.id AS livre_id,

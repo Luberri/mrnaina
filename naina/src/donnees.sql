@@ -74,3 +74,7 @@ INSERT INTO reservation_role (role_id, nombre_livre_max) VALUES (5, 10); -- Par 
 INSERT INTO adherent (nom, role_id, date_naissance) 
 VALUES 
     ('luberri', 2, '2000-05-10');
+UPDATE adherent SET nom = 'Alice' WHERE id = 1;
+UPDATE adherent SET nom = 'Bob' WHERE id = 2;
+UPDATE adherent SET nom = 'Claire' WHERE id = 3;
+UPDATE adherent SET nom = 'administrator' WHERE id = 4;

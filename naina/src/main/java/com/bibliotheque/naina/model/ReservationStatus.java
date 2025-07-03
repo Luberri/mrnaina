@@ -12,6 +12,11 @@ public class ReservationStatus {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // Lien vers Reservation
+    @ManyToOne
+    @JoinColumn(name = "reservation_id", nullable = false)
+    private Reservation reservation;
+
     @Column(name = "etat", nullable = false)
     private String etat; // 'en attente', 'confirmée', 'annulée', etc.
 

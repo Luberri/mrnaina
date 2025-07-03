@@ -9,7 +9,7 @@
     <form action="${pageContext.request.contextPath}/login" method="post">
         <label for="nom">Nom :</label>
         <input type="text" id="nom" name="nom" required>
-        <button type="submit">Se connecter</button>
+        <button class="btn" type="submit">Se connecter</button>
     </form>
 
     <p>

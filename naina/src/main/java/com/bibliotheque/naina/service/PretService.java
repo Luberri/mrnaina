@@ -25,7 +25,15 @@ public class PretService {
     private PretJourService pretJourService;
 
     public List<Pret> findAll() {
-        return pretRepository.findAll();
+        return pretRepository.findAll()
+            .stream()
+            .sorted((p1, p2) -> {
+                // Si tu as un champ datePret, utilise-le, sinon adapte avec dateRetour ou autre
+                if (p1.getDateRetour() == null) return 1;
+                if (p2.getDateRetour() == null) return -1;
+                return p2.getDateRetour().compareTo(p1.getDateRetour());
+            })
+            .toList();
     }
 
     public Optional<Pret> findById(Long id) {

@@ -22,7 +22,7 @@
         <label for="dateNaissance">Date de naissance :</label>
         <input type="date" id="dateNaissance" name="dateNaissance" required>
         <br>
-        <button type="submit">Ajouter</button>
+        <button class="btn" type="submit">Ajouter</button>
     </form>
     <p><a href="${pageContext.request.contextPath}/adherents">Retour à la liste</a></p>
 </body>

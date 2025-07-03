@@ -22,6 +22,10 @@ public class ReservationStatusService {
         return reservationStatusRepository.findById(id);
     }
 
+    public List<ReservationStatus> findByReservationId(Long reservationId) {
+        return reservationStatusRepository.findByReservationId(reservationId);
+    }
+
     public ReservationStatus save(ReservationStatus status) {
         return reservationStatusRepository.save(status);
     }

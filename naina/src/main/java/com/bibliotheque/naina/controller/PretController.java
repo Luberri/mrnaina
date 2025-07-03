@@ -118,4 +118,27 @@ public class PretController {
         model.addAttribute("body", "pret_form.jsp");
         return "layout";
     }
+
+    @GetMapping("/mes-prets")
+    public String mesPrets(Model model) {
+        model.addAttribute("prets", pretService.findAll());
+        model.addAttribute("body", "mes_prets.jsp");
+        return "layout";
+    }
+
+    @PostMapping("/prets/{id}/rendre")
+    public String rendrePret(@PathVariable Long id, Model model) {
+        var pretOpt = pretService.findById(id);
+        if (pretOpt.isPresent()) {
+            Pret pret = pretOpt.get();
+            pret.setRendu(true);
+            pretService.save(pret);
+            model.addAttribute("message", "Le prêt a été marqué comme rendu.");
+        } else {
+            model.addAttribute("error", "Prêt introuvable.");
+        }
+        model.addAttribute("prets", pretService.findAll());
+        model.addAttribute("body", "mes_prets.jsp");
+        return "layout";
+    }
 }
