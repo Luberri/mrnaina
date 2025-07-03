@@ -1,3 +1,5 @@
+\c postgres;
+DROP DATABASE IF EXISTS bibliotheque_naina;
 CREATE DATABASE bibliotheque_naina;
 \c bibliotheque_naina;
 
@@ -51,6 +53,8 @@ CREATE TABLE mode (
     id SERIAL PRIMARY KEY,
     nom VARCHAR(50) NOT NULL UNIQUE
 );
+INSERT INTO mode (nom) VALUES ('a domicile');
+INSERT INTO mode (nom) VALUES ('sur place');
 
 -- Prêt d’un exemplaire à un adhérent
 CREATE TABLE pret (
@@ -94,6 +98,11 @@ CREATE TABLE reservation (
 
 -- Limite de réservations autorisées selon le rôle
 CREATE TABLE reservation_role (
+    id SERIAL PRIMARY KEY,
+    role_id INT NOT NULL REFERENCES role(id),
+    nombre_livre_max INT NOT NULL CHECK (nombre_livre_max >= 0)
+);
+CREATE TABLE pret_role (
     id SERIAL PRIMARY KEY,
     role_id INT NOT NULL REFERENCES role(id),
     nombre_livre_max INT NOT NULL CHECK (nombre_livre_max >= 0)

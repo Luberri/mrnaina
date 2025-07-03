@@ -15,9 +15,7 @@
         <br>
         <button type="submit">Se connecter</button>
     </form>
-    <c:if test="${not empty error}">
-        <div style="color:red">${error}</div>
-    </c:if>
+
     <p>
         <a href="${pageContext.request.contextPath}/login">Retour utilisateur</a>
     </p>

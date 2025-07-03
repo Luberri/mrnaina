@@ -46,6 +46,7 @@ public class LivreController {
         model.addAttribute("livres", livres);
         model.addAttribute("livreCategories", livreCategories);
         model.addAttribute("exemplairesDisponibles", exemplairesDisponibles);
-        return "livres";
+        model.addAttribute("body", "livres.jsp");
+        return "layout";
     }
 }

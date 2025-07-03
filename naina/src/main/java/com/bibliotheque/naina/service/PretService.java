@@ -5,6 +5,7 @@ import com.bibliotheque.naina.repository.PretRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,6 +14,15 @@ public class PretService {
 
     @Autowired
     private PretRepository pretRepository;
+
+    @Autowired
+    private AdherentService adherentService;
+    @Autowired
+    private AbonnementService abonnementService;
+    @Autowired
+    private PretRoleService pretRoleService;
+    @Autowired
+    private PretJourService pretJourService;
 
     public List<Pret> findAll() {
         return pretRepository.findAll();
@@ -28,5 +38,40 @@ public class PretService {
 
     public void deleteById(Long id) {
         pretRepository.deleteById(id);
+    }
+
+    public String verifierPret(Long adherentId) {
+        // Vérifier que l'adhérent existe
+        var adherentOpt = adherentService.findById(adherentId);
+        if (adherentOpt.isEmpty()) {
+            return "Adhérent inexistant.";
+        }
+        // Vérifier l'abonnement mensuel
+        if (!abonnementService.estAbonneCeMois(adherentId)) {
+            return "L'adhérent n'est pas abonné pour ce mois.";
+        }
+        // Récupérer le nombre max de livres pour ce rôle
+        var adherent = adherentOpt.get();
+        var pretRoleOpt = pretRoleService.findByRoleId(adherent.getRole().getId());
+        if (pretRoleOpt.isEmpty()) {
+            return "Aucune règle de prêt définie pour ce rôle.";
+        }
+        int nbMax = pretRoleOpt.get().getNombreLivreMax();
+        // Compter le nombre de prêts en cours (non rendus)
+        int nbEnCours = (int) findAll().stream()
+            .filter(p -> p.getAdherent().getId().equals(adherentId) && !Boolean.TRUE.equals(p.getRendu()))
+            .count();
+        if (nbEnCours >= nbMax) {
+            return "Nombre maximum de prêts atteint pour cet adhérent.";
+        }
+        return null; // OK
+    }
+
+    public Integer getNombreJourPourRole(Long roleId) {
+        return pretJourService.findAll().stream()
+                .filter(pj -> pj.getRole().getId().equals(roleId))
+                .map(pj -> pj.getNombreJour())
+                .findFirst()
+                .orElse(null);
     }
 }

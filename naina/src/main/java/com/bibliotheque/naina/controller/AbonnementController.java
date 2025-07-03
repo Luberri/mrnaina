@@ -26,7 +26,8 @@ public class AbonnementController {
     public String showAbonnementForm(Model model) {
         model.addAttribute("adherents", adherentService.findAll());
         model.addAttribute("abonnementTarifs", abonnementTarifService.findAll());
-        return "abonnement_nouveau";
+        model.addAttribute("body", "abonnement_nouveau.jsp");
+        return "layout";
     }
 
     @PostMapping("/abonnement/nouveau")
@@ -36,17 +37,21 @@ public class AbonnementController {
             model.addAttribute("error", "Adhérent introuvable.");
         } else {
             try {
-                Abonnement abonnement = new Abonnement();
-                abonnement.setAdherent(adherent);
-                abonnementService.save(abonnement);
-                model.addAttribute("message", "Abonnement créé avec succès !");
+                if (abonnementService.estAbonneCeMois(adherentId)) {
+                    model.addAttribute("error", "Cet adhérent a déjà payé pour ce mois.");
+                } else {
+                    Abonnement abonnement = new Abonnement();
+                    abonnement.setAdherent(adherent);
+                    abonnementService.save(abonnement);
+                    model.addAttribute("message", "Abonnement créé avec succès !");
+                }
             } catch (Exception e) {
-                // Récupère le message de l’exception SQL
                 model.addAttribute("error", e.getMessage());
             }
         }
         model.addAttribute("adherents", adherentService.findAll());
         model.addAttribute("abonnementTarifs", abonnementTarifService.findAll());
-        return "abonnement_nouveau";
+        model.addAttribute("body", "abonnement_nouveau.jsp");
+        return "layout";
     }
 }
