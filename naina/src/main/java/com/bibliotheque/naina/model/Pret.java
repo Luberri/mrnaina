@@ -30,6 +30,10 @@ public class Pret {
     @Column(name = "date_retour_reel")
     private LocalDate dateRetourReel;
 
+    
+    @Column(name = "prolongement_jour")
+    private Integer prolongementJour = 0;
+    
     @Column(name = "rendu", nullable = false)
     private Boolean rendu = false;
 }

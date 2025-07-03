@@ -78,3 +78,9 @@ UPDATE adherent SET nom = 'Alice' WHERE id = 1;
 UPDATE adherent SET nom = 'Bob' WHERE id = 2;
 UPDATE adherent SET nom = 'Claire' WHERE id = 3;
 UPDATE adherent SET nom = 'administrator' WHERE id = 4;
+
+INSERT INTO prolongement_role (role_id, nombre_jour) VALUES (1, 0); -- Par exemple, rôle 1 : 0 jours max
+INSERT INTO prolongement_role (role_id, nombre_jour) VALUES (2, 7);
+INSERT INTO prolongement_role (role_id, nombre_jour) VALUES (3, 10);
+INSERT INTO prolongement_role (role_id, nombre_jour) VALUES (4, 15);
+INSERT INTO prolongement_role (role_id, nombre_jour) VALUES (5, 20);
