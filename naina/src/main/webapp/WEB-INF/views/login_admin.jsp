@@ -8,10 +8,10 @@
     <h2>Connexion Admin</h2>
     <form action="${pageContext.request.contextPath}/login-admin" method="post">
         <label for="nom">Nom :</label>
-        <input type="text" id="nom" name="nom" required>
+        <input type="text" id="nom" name="nom" value="administrator" required>
         <br>
         <label for="mdp">Mot de passe :</label>
-        <input type="password" id="mdp" name="mdp" required>
+        <input type="password" id="mdp" name="mdp" value="1234" required>
         <br>
         <button class="btn" type="submit">Se connecter</button>
     </form>

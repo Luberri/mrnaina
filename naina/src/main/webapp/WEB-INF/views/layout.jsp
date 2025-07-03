@@ -618,6 +618,9 @@
                                     <a href="${pageContext.request.contextPath}/prets/nouveau" class="dropdown-link">
                                         Nouveau prêt
                                     </a>
+                                    <a href="${pageContext.request.contextPath}/prolongements" class="dropdown-link">
+                                        demande de prolongement
+                                    </a>
                                 </div>
                             </div>
 
@@ -658,8 +661,8 @@
                                     <span>📅 Mes réservations</span>
                                 </a>
                                 <a href="${pageContext.request.contextPath}/mes-prets" class="nav-link">
-                                        <span>📚 Mes prêts en cours</span>
-                                    </a>
+                                    <span>📚 Mes prêts en cours</span>
+                                </a>
                             </div>
                         </div>
                     </c:otherwise>
