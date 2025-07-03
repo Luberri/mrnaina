@@ -21,9 +21,8 @@ public class LoginController {
     private AdherentService adherentService;
 
     @GetMapping("/login")
-    public String showLoginForm(Model model) {
-        model.addAttribute("body", "login.jsp");
-        return "layout";
+    public String showLoginForm() {
+        return "login";
     }
 
     @PostMapping("/login")
@@ -31,11 +30,12 @@ public class LoginController {
         var adherent = adherentService.findByNom(nom);
         if (adherent == null) {
             model.addAttribute("error", "Nom inconnu. Veuillez réessayer.");
-            model.addAttribute("body", "login.jsp");
-            return "layout";
+            return "login";
         }
         session.setAttribute("nom", nom);
         session.setAttribute("adherentId", adherent.getId());
+        // Après authentification réussie
+        session.setAttribute("adherent", adherent);
         return "redirect:/livres";
     }
 
@@ -51,9 +51,8 @@ public class LoginController {
     }
 
     @GetMapping("/login-admin")
-    public String showAdminLoginForm(Model model) {
-        model.addAttribute("body", "login_admin.jsp");
-        return "layout";
+    public String showAdminLoginForm() {
+        return "login_admin";
     }
 
     @PostMapping("/login-admin")
@@ -62,21 +61,20 @@ public class LoginController {
         // Vérifie que l'adhérent existe et a le rôle id=1
         if (adherent == null || adherent.getRole() == null || adherent.getRole().getId() != 1L || !"1234".equals(mdp)) {
             model.addAttribute("error", "Nom ou mot de passe incorrect ou accès non autorisé.");
-            model.addAttribute("body", "login_admin.jsp");
-            return "layout";
+            return "login_admin";
         }
+        session.setAttribute("adherent", adherent);
         session.setAttribute("admin", true);
         session.setAttribute("adminNom", nom);
         return "redirect:/admin";
     }
 
     @GetMapping("/admin")
-    public String adminPage(HttpSession session, Model model) {
+    public String adminPage(HttpSession session) {
         // Optionnel : vérifier que l'utilisateur est bien admin
         if (session.getAttribute("admin") == null) {
             return "redirect:/login-admin";
         }
-        model.addAttribute("body", "admin.jsp");
         return "layout";
     }
 }

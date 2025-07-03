@@ -88,12 +88,12 @@ public class PretController {
                     pret.setMode(mode);
 
                     String message;
-                    if (mode.getId() == 2L) { // sur place
+                    if (mode.getId() == 2L) {
                         pret.setDateRetour(LocalDate.now().plusDays(1));
                         message = "ok, À rendre avant la fermeture du bibliothèque.";
                     } else {
                         Integer nombreJour = pretService.getNombreJourPourRole(adherent.getRole().getId());
-                        if (nombreJour == null) {
+                       if (nombreJour == null) {
                             model.addAttribute("error", "Aucune durée de prêt définie pour ce rôle.");
                             model.addAttribute("adherents", adherentService.findAll());
                             model.addAttribute("exemplaires", exemplaireService.findAll());

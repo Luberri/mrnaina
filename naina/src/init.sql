@@ -107,7 +107,11 @@ CREATE TABLE pret_role (
     role_id INT NOT NULL REFERENCES role(id),
     nombre_livre_max INT NOT NULL CHECK (nombre_livre_max >= 0)
 );
-
+CREATE TABLE reservation_status(
+    id SERIAL PRIMARY KEY,
+    etat VARCHAR(30), -- 'en attente', 'confirmée', 'annulée'
+    date DATE DEFAULT CURRENT_DATE
+)
 CREATE OR REPLACE VIEW nombre_exemplaires_disponibles AS
 SELECT
     l.id AS livre_id,

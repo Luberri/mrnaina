@@ -1,5 +1,10 @@
+<%@ page session="true" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%
+    com.bibliotheque.naina.model.Adherent adherent = (com.bibliotheque.naina.model.Adherent) session.getAttribute("adherent");
+    Long roleId = adherent != null && adherent.getRole() != null ? adherent.getRole().getId() : null;
+%>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -234,7 +239,8 @@
                 width: 200px;
             }
             .main-content {
-                margin-left: 200rika1    width: calc(100% - 200px);
+                margin-left: 200px;
+                width: calc(100% - 200px);
             }
             .header h1 {
                 font-size: 1.5rem;
@@ -259,38 +265,50 @@
 <body>
     <!-- Sidebar -->
     <div class="sidebar">
-        <h2>Bibliothèque Naina</h2>
+        <h2>Bibliothèque</h2>
         <ul>
-            <li><a href="${pageContext.request.contextPath}/">Accueil</a></li>
-            <li>
-                <a href="#" class="dropdown-toggle">Adhérents</a>
-                <ul class="dropdown-menu">
-                    <li><a href="${pageContext.request.contextPath}/adherents">Liste</a></li>
-                    <li><a href="${pageContext.request.contextPath}/adherents/nouveau">Ajouter</a></li>
-                </ul>
-            </li>
-            <li>
-                <a href="#" class="dropdown-toggle">Livres</a>
-                <ul class="dropdown-menu">
-                    <li><a href="${pageContext.request.contextPath}/livres">Liste</a></li>
-                    <li><a href="${pageContext.request.contextPath}/livres/nouveau">Ajouter</a></li>
-                </ul>
-            </li>
-            <li>
-                <a href="#" class="dropdown-toggle">Prêts</a>
-                <ul class="dropdown-menu">
-                    <li><a href="${pageContext.request.contextPath}/prets">Liste</a></li>
-                    <li><a href="${pageContext.request.contextPath}/prets/nouveau">Nouveau</a></li>
-                </ul>
-            </li>
-            <li>
-                <a href="#" class="dropdown-toggle">Abonnement</a>
-                <ul class="dropdown-menu">
-                    <li><a href="${pageContext.request.contextPath}/abonnement/nouveau">Nouveau</a></li>
-                    <li><a href="${pageContext.request.contextPath}/abonnements">Liste</a></li>
-                    <li><a href="${pageContext.request.contextPath}/abonnement/renouveler">Renouveler</a></li>
-                </ul>
-            </li>
+            <c:choose>
+                <c:when test="<%= roleId != null && roleId == 1L %>">
+                    <!-- Admin : accès à tout -->
+                    <li>
+                        <a href="#" class="dropdown-toggle">Adhérents</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="${pageContext.request.contextPath}/adherents">Liste</a></li>
+                            <li><a href="${pageContext.request.contextPath}/adherents/nouveau">Ajouter</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#" class="dropdown-toggle">Livres</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="${pageContext.request.contextPath}/livres">Liste</a></li>
+                            <li><a href="${pageContext.request.contextPath}/livres/nouveau">Ajouter</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#" class="dropdown-toggle">Prêts</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="${pageContext.request.contextPath}/prets">Liste</a></li>
+                            <li><a href="${pageContext.request.contextPath}/prets/nouveau">Nouveau</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#" class="dropdown-toggle">Abonnement</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="${pageContext.request.contextPath}/abonnement/nouveau">Nouveau</a></li>
+                            <li><a href="${pageContext.request.contextPath}/abonnements">Liste</a></li>
+                        </ul>
+                    </li>
+                </c:when>
+                <c:otherwise>
+                    <!-- Utilisateur normal : accès livres uniquement -->
+                    <li>
+                        <a href="#" class="dropdown-toggle">Livres</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="${pageContext.request.contextPath}/livres">Liste</a></li>
+                        </ul>
+                    </li>
+                </c:otherwise>
+            </c:choose>
             <li><a href="${pageContext.request.contextPath}/logout">Déconnexion</a></li>
         </ul>
     </div>
@@ -298,12 +316,14 @@
     <!-- Main Content -->
     <div class="main-content">
         <div class="header">
+        <span style="display: flex; justify-content: space-between; align-items: center;">
             <h1>Gestion de la Bibliothèque Naina</h1>
-            <p>Solution moderne pour la gestion des livres, abonnements et prêts</p>
+            <h2 style="margin-right:40px;color: white;"><%= adherent.getNom() %></h2>
+        </span>
+            <p>Solution moderne pour la gestion des livres, abonnements et prêts </p>
         </div>
 
         <div class="content">
-            <!-- Messages -->
             <c:if test="${not empty message}">
                 <div class="alert-success">${message}</div>
             </c:if>

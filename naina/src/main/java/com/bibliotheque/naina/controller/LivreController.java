@@ -5,6 +5,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.bibliotheque.naina.service.LivreService;
+import com.bibliotheque.naina.service.ExemplaireService;
 import com.bibliotheque.naina.service.LivreCategorieService;
 import com.bibliotheque.naina.model.Livre;
 import com.bibliotheque.naina.model.LivreCategorie;
@@ -19,6 +20,8 @@ public class LivreController {
     @Autowired
     private LivreService livreService;
 
+    @Autowired
+    private ExemplaireService exemplaireService;
     @Autowired
     private LivreCategorieService livreCategorieService;
 
@@ -37,11 +40,18 @@ public class LivreController {
                 Collectors.mapping(lc -> lc.getCategorie().getNom(), Collectors.toList())
             ));
 
-        Map<Long, Integer> exemplairesDisponibles = vueExemplairesService.findAll().stream()
-            .collect(Collectors.toMap(
-                VueNombreExemplairesDisponibles::getLivreId,
-                VueNombreExemplairesDisponibles::getNombreExemplairesDisponibles
-            ));
+        // Map livreId -> nombre total d'exemplaires disponibles
+        Map<Long, Integer> exemplairesDisponibles = new HashMap<>();
+        for (Livre livre : livres) {
+            int totalDispo = 0;
+            List<com.bibliotheque.naina.model.Exemplaire> exs = exemplaireService.findAll().stream()
+                .filter(ex -> ex.getLivre().getId().equals(livre.getId()))
+                .toList();
+            for (var ex : exs) {
+                totalDispo += exemplaireService.getNombreDisponible(ex.getId());
+            }
+            exemplairesDisponibles.put(livre.getId(), totalDispo);
+        }
 
         model.addAttribute("livres", livres);
         model.addAttribute("livreCategories", livreCategories);

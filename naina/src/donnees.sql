@@ -64,3 +64,13 @@ INSERT INTO pret_jour (role_id, nombre_jour) VALUES (4, 22);
 INSERT INTO adherent (nom, role_id, date_naissance) VALUES (
     'Anonymous', 5, '1990-06-20'
 );
+
+INSERT INTO reservation_role (role_id, nombre_livre_max) VALUES (1, 0); -- Par exemple, rôle 1 : 3 livres max
+INSERT INTO reservation_role (role_id, nombre_livre_max) VALUES (2, 2); -- Par exemple, rôle 2 : 5 livres max
+INSERT INTO reservation_role (role_id, nombre_livre_max) VALUES (3, 5); -- Par exemple, rôle 3 : 5 livres max
+INSERT INTO reservation_role (role_id, nombre_livre_max) VALUES (4, 8); -- Par exemple, rôle 4 : 8 livres max
+INSERT INTO reservation_role (role_id, nombre_livre_max) VALUES (5, 10); -- Par exemple, rôle 5 : 10 livres max
+
+INSERT INTO adherent (nom, role_id, date_naissance) 
+VALUES 
+    ('luberri', 2, '2000-05-10');
