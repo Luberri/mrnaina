@@ -63,6 +63,18 @@
         .logout:hover {
             text-decoration: underline;
         }
+        .reserve-button {
+            background: #00a8ff;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            display: inline-block;
+            text-align: center;
+            width: 100%;
+        }
     </style>
 </head>
 <body>
@@ -81,7 +93,13 @@
                 <p>
                     <strong>Exemplaires disponibles :</strong>
                     <c:out value="${exemplairesDisponibles[livre.id]}" />
-                </p>    
+                </p>
+                <form action="${pageContext.request.contextPath}/reservations/nouveau" method="get">
+                    <input type="hidden" name="livreId" value="${livre.id}" />
+                    <button type="submit" class="reserve-button">
+                        Réserver
+                    </button>
+                </form>
             </div>
         </c:forEach>
     </div>

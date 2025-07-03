@@ -174,6 +174,30 @@
         button {
             margin:20px 0px 20px 0px;
         }
+                .autocomplete-items {
+            position: absolute;
+            border: 1px solid #d4d4d4;
+            border-bottom: none;
+            border-top: none;
+            z-index: 99;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: #fff;
+        }
+        .autocomplete-items div {
+            padding: 10px;
+            cursor: pointer;
+            background-color: #fff;
+            border-bottom: 1px solid #d4d4d4;
+        }
+        .autocomplete-items div:hover {
+            background-color: #e9e9e9;
+        }
+        .autocomplete-active {
+            background-color: #00a8ff !important;
+            color: #fff;
+        }
         input[type="submit"], input[type="button"], button {
             background-color: #00a8ff;
             color: #ffffff;
@@ -318,7 +342,12 @@
         <div class="header">
         <span style="display: flex; justify-content: space-between; align-items: center;">
             <h1>Gestion de la Bibliothèque Naina</h1>
-            <h2 style="margin-right:40px;color: white;"><%= adherent.getNom() %></h2>
+            <% if (adherent != null && adherent.getNom() != null) { %>
+                <h2 style="margin-right:40px; color: white;"><%= adherent.getNom() %></h2>
+            <% } else { %>
+                <h2 style="margin-right:40px; color: white;"></h2>
+            <% } %>
+
         </span>
             <p>Solution moderne pour la gestion des livres, abonnements et prêts </p>
         </div>
@@ -330,18 +359,12 @@
             <c:if test="${not empty error}">
                 <div class="alert-error">${error}</div>
             </c:if>
-
-            <!-- Contenu dynamique -->
             <jsp:include page="${body}" />
         </div>
-
-        <!-- Footer -->
         <footer>
             © 2025 Bibliothèque Naina — Projet universitaire
         </footer>
     </div>
-
-    <!-- JavaScript pour le sous-menu -->
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
