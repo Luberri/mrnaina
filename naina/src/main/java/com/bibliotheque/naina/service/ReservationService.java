@@ -15,7 +15,10 @@ public class ReservationService {
     private ReservationRepository reservationRepository;
 
     public List<Reservation> findAll() {
-        return reservationRepository.findAll();
+        return reservationRepository.findAll()
+            .stream()
+            .sorted((r1, r2) -> r2.getDateReservation().compareTo(r1.getDateReservation()))
+            .toList();
     }
 
     public Optional<Reservation> findById(Long id) {

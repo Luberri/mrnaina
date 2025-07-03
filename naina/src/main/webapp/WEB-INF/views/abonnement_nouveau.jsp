@@ -42,7 +42,7 @@
             <div id="adherent-autocomplete-list" class="autocomplete-items"></div>
         </div>
         <span id="prixAbonnement" style="margin-left:20px;"></span>
-        <button type="submit">Valider</button>
+        <button class="btn" type="submit">Valider</button>
     </form>
     <script>
         // Prépare la liste des adhérents côté JS

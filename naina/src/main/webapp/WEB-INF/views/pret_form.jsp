@@ -4,32 +4,7 @@
 <html>
 <head>
     <title>Nouveau prêt</title>
-    <style>
-        .autocomplete-items {
-            position: absolute;
-            border: 1px solid #d4d4d4;
-            border-bottom: none;
-            border-top: none;
-            z-index: 99;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background: #fff;
-        }
-        .autocomplete-items div {
-            padding: 10px;
-            cursor: pointer;
-            background-color: #fff;
-            border-bottom: 1px solid #d4d4d4;
-        }
-        .autocomplete-items div:hover {
-            background-color: #e9e9e9;
-        }
-        .autocomplete-active {
-            background-color: #00a8ff !important;
-            color: #fff;
-        }
-    </style>
+
 </head>
 <body>
     <h2>Enregistrer un prêt</h2>
@@ -41,12 +16,13 @@
             <div id="adherent-autocomplete-list" class="autocomplete-items"></div>
         </div>
         <br>
-        <label>Exemplaire :</label>
-        <select name="exemplaireId" required>
-            <c:forEach var="ex" items="${exemplaires}">
-                <option value="${ex.id}">${ex.livre.titre} (dispo: ${disponibilites[ex.id]})</option>
-            </c:forEach>
-        </select><br>
+        <div style="position:relative;">
+            <label>Exemplaire :</label>
+            <input id="exemplaireTitre" type="text" name="exemplaireTitre" required placeholder="Tapez le titre...">
+            <input type="hidden" name="exemplaireId" id="exemplaireId">
+            <div id="exemplaire-autocomplete-list" class="autocomplete-items"></div>
+        </div>
+        <br>
         <label>Mode :</label>
         <select name="modeId" required>
             <c:forEach var="mode" items="${modes}">
@@ -54,10 +30,10 @@
             </c:forEach>
         </select><br>
 
-        <button type="submit">Valider</button>
+        <button class="btn" type="submit">Valider</button>
     </form>
     <script>
-        // Prépare la liste des adhérents côté JS
+        // Adhérents
         var adherents = [
             <c:forEach var="adherent" items="${adherents}" varStatus="loop">
                 {id: "${adherent.id}", nom: "${adherent.nom}"}<c:if test="${!loop.last}">,</c:if>
@@ -89,8 +65,41 @@
             });
         });
 
+        // Exemplaires
+        var exemplaires = [
+            <c:forEach var="ex" items="${exemplaires}" varStatus="loop">
+                {id: "${ex.id}", titre: "${ex.livre.titre}", dispo: "${disponibilites[ex.id]}"}<c:if test="${!loop.last}">,</c:if>
+            </c:forEach>
+        ];
+
+        const exInput = document.getElementById('exemplaireTitre');
+        const exHiddenId = document.getElementById('exemplaireId');
+        const exAutocompleteList = document.getElementById('exemplaire-autocomplete-list');
+
+        exInput.addEventListener('input', function() {
+            const val = this.value.trim().toLowerCase();
+            exAutocompleteList.innerHTML = '';
+            exHiddenId.value = '';
+            if (!val) return;
+            let count = 0;
+            exemplaires.forEach(function(ex) {
+                if (ex.titre.toLowerCase().includes(val) && count < 8) {
+                    const div = document.createElement('div');
+                    div.textContent = ex.titre + " (dispo: " + ex.dispo + ")";
+                    div.onclick = function() {
+                        exInput.value = ex.titre + " (dispo: " + ex.dispo + ")";
+                        exHiddenId.value = ex.id;
+                        exAutocompleteList.innerHTML = '';
+                    };
+                    exAutocompleteList.appendChild(div);
+                    count++;
+                }
+            });
+        });
+
         document.addEventListener('click', function(e) {
             if (e.target !== input) autocompleteList.innerHTML = '';
+            if (e.target !== exInput) exAutocompleteList.innerHTML = '';
         });
     </script>
 

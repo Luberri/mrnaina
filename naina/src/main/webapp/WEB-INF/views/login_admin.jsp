@@ -13,7 +13,7 @@
         <label for="mdp">Mot de passe :</label>
         <input type="password" id="mdp" name="mdp" required>
         <br>
-        <button type="submit">Se connecter</button>
+        <button class="btn" type="submit">Se connecter</button>
     </form>
 
     <p>
