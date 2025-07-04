@@ -9,17 +9,17 @@ INSERT INTO role (nom) VALUES ('anonyme');
 INSERT INTO categorie (nom) VALUES ('Roman');
 INSERT INTO categorie (nom) VALUES ('Science');
 INSERT INTO categorie (nom) VALUES ('Histoire');
+INSERT INTO categorie (nom) VALUES ('+18');
 
--- Livres
+-- Insertion des livres
 INSERT INTO livre (titre, auteur, editeur, annee_publication) 
 VALUES 
     ('Le Petit Prince', 'Antoine de Saint-Exupery', 'Gallimard', 1943),
     ('Introduction à la Physique', 'Marie Curie', 'Dunod', 1923),
-    ('Les Miserables', 'Victor Hugo', 'A. Lacroix', 1862);
+    ('Les Miserables', 'Victor Hugo', 'A. Lacroix', 1862),
+    ('Rose', 'Victor Sins', 'V. V', 1962);
 
--- Adherents (pas d'anonyme)
--- On suppose ici que les rôles ont été insérés dans le même ordre
--- bibliotheque = 1, etudiant = 2, professeur = 3, professionnel = 4
+-- Insertion des adhérents (rôles supposés : 1 = bibliotheque, 2 = etudiant, 3 = professeur, 4 = professionnel)
 INSERT INTO adherent (nom, role_id, date_naissance) 
 VALUES 
     ('Alice Dupont', 2, '2000-05-10'),
@@ -27,13 +27,15 @@ VALUES
     ('Claire Durand', 4, '1990-03-15'),
     ('administrator', 1, '1990-03-15');
 
--- Exemplaires (en se basant sur l'ordre d'insertion des livres)
+-- Insertion des exemplaires (en se basant sur l'ordre d'insertion des livres : 1 à 4)
 INSERT INTO exemplaire (livre_id, nombre_dispo) 
 VALUES 
     (1, 3),
-    (1, 1),
+    (1, 1), -- second exemplaire du livre 1
     (2, 6),
-    (3, 2);
+    (3, 2),
+    (4, 4);
+
 
 -- LivreCategorie
 INSERT INTO livre_categorie (livre_id, categorie_id) 
@@ -41,7 +43,9 @@ VALUES
     (1, 1),
     (2, 2),
     (3, 1),
-    (3, 3);
+    (3, 3),
+    (4, 4),
+    (4, 1);
 
 -- Abonnement tarif (prix par rôle)
 INSERT INTO abonnement_tarif (role_id, prix) 
@@ -73,8 +77,14 @@ INSERT INTO reservation_role (role_id, nombre_livre_max) VALUES (5, 10); -- Par 
 
 INSERT INTO adherent (nom, role_id, date_naissance) 
 VALUES 
-    ('luberri', 2, '2000-05-10');
+    ('luberri', 2, '2020-05-10');
 UPDATE adherent SET nom = 'Alice' WHERE id = 1;
 UPDATE adherent SET nom = 'Bob' WHERE id = 2;
 UPDATE adherent SET nom = 'Claire' WHERE id = 3;
 UPDATE adherent SET nom = 'administrator' WHERE id = 4;
+
+INSERT INTO prolongement_role (role_id, nombre_jour) VALUES (1, 0); -- Par exemple, rôle 1 : 0 jours max
+INSERT INTO prolongement_role (role_id, nombre_jour) VALUES (2, 7);
+INSERT INTO prolongement_role (role_id, nombre_jour) VALUES (3, 10);
+INSERT INTO prolongement_role (role_id, nombre_jour) VALUES (4, 15);
+INSERT INTO prolongement_role (role_id, nombre_jour) VALUES (5, 20);

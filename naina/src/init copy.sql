@@ -1,6 +1,6 @@
 -- Connexion
 \c postgres;
-DROP DATABASE IF EXISTS bibliotheque_naina1;
+DROP DATABASE  bibliotheque_naina1;
 CREATE DATABASE bibliotheque_naina1;
 \c bibliotheque_naina1;
 
@@ -56,6 +56,12 @@ CREATE TABLE mode (
 );
 INSERT INTO mode (nom) VALUES ('a domicile'), ('sur place');
 
+CREATE TABLE prolongement_role (
+    id SERIAL PRIMARY KEY,
+    role_id INT NOT NULL REFERENCES role(id) ON DELETE CASCADE,
+    nombre_jour INT NOT NULL CHECK (nombre_jour > 0)
+);
+
 -- Prêts
 CREATE TABLE pret (
     id SERIAL PRIMARY KEY,
@@ -64,7 +70,13 @@ CREATE TABLE pret (
     mode_id INT NOT NULL REFERENCES mode(id) ON DELETE SET NULL,
     date_retour DATE NOT NULL,
     date_retour_reel DATE,
+    prolongement_jour INT DEFAULT 0 CHECK (prolongement_jour >= 0),
     rendu BOOLEAN DEFAULT FALSE
+);
+CREATE TABLE prolongement_demande (
+    id SERIAL PRIMARY KEY,
+    pret_id INT NOT NULL REFERENCES pret(id) ON DELETE CASCADE,
+    nombre_jour INT NOT NULL CHECK (nombre_jour > 0)
 );
 
 -- Durée max de prêt par rôle
@@ -102,7 +114,12 @@ CREATE TABLE reservation_role (
     role_id INT NOT NULL REFERENCES role(id) ON DELETE CASCADE,
     nombre_livre_max INT NOT NULL CHECK (nombre_livre_max >= 0)
 );
-
+CREATE TABLE penalite (
+    id SERIAL PRIMARY KEY,
+    adherent_id INT NOT NULL REFERENCES adherent(id) ON DELETE CASCADE,
+    pret_id INT NOT NULL REFERENCES pret(id) ON DELETE CASCADE,
+    duree INT NOT NULL CHECK (duree >= 0)
+);
 -- Limites de prêt par rôle
 CREATE TABLE pret_role (
     id SERIAL PRIMARY KEY,
@@ -117,6 +134,7 @@ CREATE TABLE reservation_status(
     etat VARCHAR(30) NOT NULL CHECK (etat IN ('en attente', 'confirmee', 'annulee')),
     date DATE DEFAULT CURRENT_DATE
 );
+
 
 -- Vue sur les exemplaires disponibles
 CREATE OR REPLACE VIEW nombre_exemplaires_disponibles AS

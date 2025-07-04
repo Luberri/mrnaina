@@ -23,6 +23,24 @@
                     <form action="${pageContext.request.contextPath}/prets/${pret.id}/rendre" method="post" style="display:inline;">
                         <button type="submit" class="btn">Rendre</button>
                     </form>
+                    <c:if test="${pret.mode.id == 1 && !pret.rendu}">
+                        <form action="${pageContext.request.contextPath}/prets/${pret.id}/prolonger" method="post" style="display:inline;">
+                            <button class="btn" style="color: black;" type="submit" name="jours" value="1"
+                                <c:if test="${pret.prolongementJour != null && prolongementRoles != null}">
+                                    <c:forEach var="pr" items="${prolongementRoles}">
+                                        <c:if test="${pr.role.id == pret.adherent.role.id && pret.prolongementJour >= pr.nombreJour}">disabled</c:if>
+                                    </c:forEach>
+                                </c:if>
+                            >+1j</button>
+                            <button class="btn" style="color: black;" type="submit" name="jours" value="5"
+                                <c:if test="${pret.prolongementJour != null && prolongementRoles != null}">
+                                    <c:forEach var="pr" items="${prolongementRoles}">
+                                        <c:if test="${pr.role.id == pret.adherent.role.id && pret.prolongementJour + 5 > pr.nombreJour}">disabled</c:if>
+                                    </c:forEach>
+                                </c:if>
+                            >+5j</button>
+                        </form>
+                    </c:if>
                 </td>
             </tr>
         </c:if>

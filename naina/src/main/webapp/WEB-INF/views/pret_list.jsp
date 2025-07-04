@@ -22,7 +22,7 @@
                 <td>${pret.adherent.nom}</td>
                 <td>${pret.exemplaire.livre.titre}</td>
                 <td>${pret.mode.nom}</td>
-                <td>${pret.dateRetour}</td>
+                <td>${pret.dateRetourReel}</td>
                 <td><c:out value="${pret.rendu ? 'Oui' : 'Non'}"/></td>
             </tr>
         </c:forEach>

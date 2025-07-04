@@ -8,6 +8,9 @@ import com.bibliotheque.naina.service.PretService;
 import com.bibliotheque.naina.service.AdherentService;
 import com.bibliotheque.naina.service.ExemplaireService;
 import com.bibliotheque.naina.service.ModeService;
+import com.bibliotheque.naina.service.ProlongementRoleService;
+import com.bibliotheque.naina.service.ProlongementDemandeService;
+import com.bibliotheque.naina.service.AbonnementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,6 +29,12 @@ public class PretController {
     private ExemplaireService exemplaireService;
     @Autowired
     private ModeService modeService;
+    @Autowired
+    private AbonnementService abonnementService;
+    @Autowired
+    private ProlongementDemandeService prolongementDemandeService;
+    @Autowired
+    private ProlongementRoleService prolongementRoleService;
 
     @GetMapping("/prets")
     public String listePrets(Model model) {
@@ -77,6 +86,24 @@ public class PretController {
         if (adherent != null && mode != null && adherent.getRole().getId() == 5L && mode.getId() == 1L) {
             model.addAttribute("error", "Un adhérent anonyme ne peut pas emprunter à domicile.");
         } else {
+            // Règle : moins de 18 ans, interdit catégorie 4
+            Exemplaire exemplaire = exemplaireService.findById(exemplaireId).orElse(null);
+            if (adherent != null && exemplaire != null) {
+                java.time.LocalDate today = java.time.LocalDate.now();
+                int age = java.time.Period.between(adherent.getDateNaissance(), today).getYears();
+                var livre = exemplaire.getLivre();
+                // Vérifie si le livre est dans la catégorie 4
+                boolean isCategorie4 = livre.getCategories().stream().anyMatch(cat -> cat.getId() == 4L);
+                if (age < 18 && isCategorie4) {
+                    model.addAttribute("error", "Vous devez avoir au moins 18 ans pour emprunter un livre de cette catégorie.");
+                    model.addAttribute("adherents", adherentService.findAll());
+                    model.addAttribute("exemplaires", exemplaireService.findAll());
+                    model.addAttribute("modes", modeService.findAll());
+                    model.addAttribute("body", "pret_form.jsp");
+                    return "layout";
+                }
+            }
+
             String erreur = pretService.verifierPret(adherentId);
             if (erreur != null) {
                 model.addAttribute("error", erreur);
@@ -84,7 +111,7 @@ public class PretController {
                 try {
                     Pret pret = new Pret();
                     pret.setAdherent(adherent);
-                    pret.setExemplaire(exemplaireService.findById(exemplaireId).orElse(null));
+                    pret.setExemplaire(exemplaire);
                     pret.setMode(mode);
 
                     String message;
@@ -93,7 +120,7 @@ public class PretController {
                         message = "ok, À rendre avant la fermeture du bibliothèque.";
                     } else {
                         Integer nombreJour = pretService.getNombreJourPourRole(adherent.getRole().getId());
-                       if (nombreJour == null) {
+                        if (nombreJour == null) {
                             model.addAttribute("error", "Aucune durée de prêt définie pour ce rôle.");
                             model.addAttribute("adherents", adherentService.findAll());
                             model.addAttribute("exemplaires", exemplaireService.findAll());
@@ -132,6 +159,7 @@ public class PretController {
         if (pretOpt.isPresent()) {
             Pret pret = pretOpt.get();
             pret.setRendu(true);
+            pret.setDateRetourReel(LocalDate.now());
             pretService.save(pret);
             model.addAttribute("message", "Le prêt a été marqué comme rendu.");
         } else {
@@ -139,6 +167,92 @@ public class PretController {
         }
         model.addAttribute("prets", pretService.findAll());
         model.addAttribute("body", "mes_prets.jsp");
+        return "layout";
+    }
+
+    @PostMapping("/prets/{id}/prolonger")
+    public String prolongerPret(
+            @PathVariable Long id,
+            @RequestParam int jours,
+            Model model
+    ) {
+        var pretOpt = pretService.findById(id);
+        if (pretOpt.isPresent()) {
+            Pret pret = pretOpt.get();
+            // Vérifie que le mode est "sur place"
+            if (pret.getMode().getId() != 1L) {
+                model.addAttribute("error", "Seuls les prêts à domicile peuvent être prolongés.");
+            } else {
+                // Récupère la limite de prolongement pour le rôle
+                int maxProlongement = prolongementRoleService.findAll().stream()
+                    .filter(pr -> pr.getRole().getId().equals(pret.getAdherent().getRole().getId()))
+                    .map(pr -> pr.getNombreJour())
+                    .findFirst()
+                    .orElse(0);
+
+                // Calcule le total demandé (somme des demandes existantes + nouvelle)
+                int totalDemande = prolongementDemandeService.findByPretId(pret.getId()).stream()
+                    .mapToInt(pd -> pd.getNombreJour())
+                    .sum();
+                int nouveauTotal = totalDemande + jours;
+
+                if (nouveauTotal > maxProlongement) {
+                    model.addAttribute("error", "Vous ne pouvez pas prolonger de plus de " + maxProlongement + " jours.");
+                } else {
+                    // Insertion de la demande
+                    com.bibliotheque.naina.model.ProlongementDemande demande = new com.bibliotheque.naina.model.ProlongementDemande();
+                    demande.setPret(pret);
+                    demande.setNombreJour(jours);
+                    prolongementDemandeService.save(demande);
+                    model.addAttribute("message", "Demande de prolongement +" + jours + " jours enregistrée !");
+                }
+            }
+        } else {
+            model.addAttribute("error", "Prêt introuvable.");
+        }
+        model.addAttribute("prets", pretService.findAll());
+        model.addAttribute("body", "mes_prets.jsp");
+        return "layout";
+    }
+
+    @GetMapping("/prolongements")
+    public String listeProlongements(Model model) {
+        model.addAttribute("prolongements", prolongementDemandeService.findAll());
+        model.addAttribute("body", "prolongement_list.jsp");
+        return "layout";
+    }
+
+    @PostMapping("/prolongements/{id}/valider")
+    public String validerProlongement(@PathVariable Long id, Model model) {
+        var demandeOpt = prolongementDemandeService.findById(id);
+        if (demandeOpt.isPresent()) {
+            var demande = demandeOpt.get();
+            Pret pret = demande.getPret();
+            Adherent adherent = pret.getAdherent();
+
+            // Vérification de l'abonnement pour le mois courant
+            if (!abonnementService.estAbonneCeMois(adherent.getId())) {
+                model.addAttribute("error", "L'adhérent n'est pas abonné pour ce mois. Prolongement refusé.");
+            } else {
+                int jours = demande.getNombreJour();
+                pret.setProlongementJour((pret.getProlongementJour() == null ? 0 : pret.getProlongementJour()) + jours);
+                pret.setDateRetour(pret.getDateRetour().plusDays(jours));
+                pretService.save(pret);
+                prolongementDemandeService.deleteById(id);
+                model.addAttribute("message", "Prolongement validé !");
+            }
+        }
+        model.addAttribute("prolongements", prolongementDemandeService.findAll());
+        model.addAttribute("body", "prolongement_list.jsp");
+        return "layout";
+    }
+
+    @PostMapping("/prolongements/{id}/refuser")
+    public String refuserProlongement(@PathVariable Long id, Model model) {
+        prolongementDemandeService.deleteById(id);
+        model.addAttribute("message", "Demande supprimée.");
+        model.addAttribute("prolongements", prolongementDemandeService.findAll());
+        model.addAttribute("body", "prolongement_list.jsp");
         return "layout";
     }
 }
