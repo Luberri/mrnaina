@@ -11,6 +11,7 @@ import com.bibliotheque.naina.service.ModeService;
 import com.bibliotheque.naina.service.ProlongementRoleService;
 import com.bibliotheque.naina.service.ProlongementDemandeService;
 import com.bibliotheque.naina.service.AbonnementService;
+import com.bibliotheque.naina.service.PenaliteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,6 +36,8 @@ public class PretController {
     private ProlongementDemandeService prolongementDemandeService;
     @Autowired
     private ProlongementRoleService prolongementRoleService;
+    @Autowired
+    private PenaliteService penaliteService;
 
     @GetMapping("/prets")
     public String listePrets(Model model) {
@@ -70,7 +73,9 @@ public class PretController {
     ) {
         Adherent adherent = adherentService.findById(adherentId).orElse(null);
         Mode mode = modeService.findById(modeId).orElse(null);
-
+                    model.addAttribute("adherents", adherentService.findAll());
+                    model.addAttribute("exemplaires", exemplaireService.findAll());
+                    model.addAttribute("modes", modeService.findAll());
         // Vérification de la disponibilité de l'exemplaire
         int dispo = exemplaireService.getNombreDisponible(exemplaireId);
         if (dispo <= 0) {
@@ -81,7 +86,11 @@ public class PretController {
             model.addAttribute("body", "pret_form.jsp");
             return "layout";
         }
-
+        if (penaliteService.estEncorePenalise(adherentId)) {
+            model.addAttribute("error", "Vous ne pouvez pas emprunter de livres tant que vous êtes sous le coup d'une pénalité.");
+            model.addAttribute("body", "pret_form.jsp");
+            return "layout";
+        }
         // Règle : anonyme (role_id=5) ne peut pas faire de prêt à domicile (mode_id=1)
         if (adherent != null && mode != null && adherent.getRole().getId() == 5L && mode.getId() == 1L) {
             model.addAttribute("error", "Un adhérent anonyme ne peut pas emprunter à domicile.");
@@ -96,9 +105,6 @@ public class PretController {
                 boolean isCategorie4 = livre.getCategories().stream().anyMatch(cat -> cat.getId() == 4L);
                 if (age < 18 && isCategorie4) {
                     model.addAttribute("error", "Vous devez avoir au moins 18 ans pour emprunter un livre de cette catégorie.");
-                    model.addAttribute("adherents", adherentService.findAll());
-                    model.addAttribute("exemplaires", exemplaireService.findAll());
-                    model.addAttribute("modes", modeService.findAll());
                     model.addAttribute("body", "pret_form.jsp");
                     return "layout";
                 }
@@ -161,7 +167,18 @@ public class PretController {
             pret.setRendu(true);
             pret.setDateRetourReel(LocalDate.parse(dateRetourReel));
             pretService.save(pret);
-            model.addAttribute("message", "Le prêt a été marqué comme rendu.");
+            // Vérification du retard et insertion de pénalité si besoin
+            if (pret.getDateRetourReel() != null && pret.getDateRetour() != null && pret.getDateRetourReel().isAfter(pret.getDateRetour())) {
+                com.bibliotheque.naina.model.Penalite penalite = new com.bibliotheque.naina.model.Penalite();
+                penalite.setAdherent(pret.getAdherent());
+                penalite.setPret(pret);
+                // Exemple : 7 jours de pénalité par défaut, à adapter selon ta règle
+                penalite.setDuree(7);
+                penaliteService.save(penalite);
+                model.addAttribute("message", "Le prêt a été marqué comme rendu. Pénalité appliquée pour retard.");
+            } else {
+                model.addAttribute("message", "Le prêt a été marqué comme rendu.");
+            }
         } else {
             model.addAttribute("error", "Prêt introuvable.");
         }

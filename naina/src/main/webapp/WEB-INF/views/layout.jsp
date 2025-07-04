@@ -683,7 +683,7 @@
             <header class="main-header">
                 <div class="header-content">
                     <div class="header-info">
-                        <h1>Bibliothèque Naina</h1>
+                        <h1>Bibliothèque Mr Naina</h1>
                         <p>Système de gestion moderne et intuitif</p>
                     </div>
                     <div class="user-profile">
