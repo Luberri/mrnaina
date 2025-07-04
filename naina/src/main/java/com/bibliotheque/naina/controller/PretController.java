@@ -10,6 +10,7 @@ import com.bibliotheque.naina.service.ExemplaireService;
 import com.bibliotheque.naina.service.ModeService;
 import com.bibliotheque.naina.service.ProlongementRoleService;
 import com.bibliotheque.naina.service.ProlongementDemandeService;
+import com.bibliotheque.naina.service.AbonnementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,9 +30,11 @@ public class PretController {
     @Autowired
     private ModeService modeService;
     @Autowired
-    private ProlongementRoleService prolongementRoleService;
+    private AbonnementService abonnementService;
     @Autowired
     private ProlongementDemandeService prolongementDemandeService;
+    @Autowired
+    private ProlongementRoleService prolongementRoleService;
 
     @GetMapping("/prets")
     public String listePrets(Model model) {
@@ -156,6 +159,7 @@ public class PretController {
         if (pretOpt.isPresent()) {
             Pret pret = pretOpt.get();
             pret.setRendu(true);
+            pret.setDateRetourReel(LocalDate.now());
             pretService.save(pret);
             model.addAttribute("message", "Le prêt a été marqué comme rendu.");
         } else {
