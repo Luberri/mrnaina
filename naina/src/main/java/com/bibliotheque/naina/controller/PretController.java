@@ -154,12 +154,12 @@ public class PretController {
     }
 
     @PostMapping("/prets/{id}/rendre")
-    public String rendrePret(@PathVariable Long id, Model model) {
+    public String rendrePret(@PathVariable Long id, @RequestParam("dateRetourReel") String dateRetourReel, Model model) {
         var pretOpt = pretService.findById(id);
         if (pretOpt.isPresent()) {
             Pret pret = pretOpt.get();
             pret.setRendu(true);
-            pret.setDateRetourReel(LocalDate.now());
+            pret.setDateRetourReel(LocalDate.parse(dateRetourReel));
             pretService.save(pret);
             model.addAttribute("message", "Le prêt a été marqué comme rendu.");
         } else {

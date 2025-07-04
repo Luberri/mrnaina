@@ -21,6 +21,7 @@
                 <td>${pret.mode.nom}</td>
                 <td>
                     <form action="${pageContext.request.contextPath}/prets/${pret.id}/rendre" method="post" style="display:inline;">
+                        <input type="date" name="dateRetourReel" required value="${now}" max="${now}" />
                         <button type="submit" class="btn">Rendre</button>
                     </form>
                     <c:if test="${pret.mode.id == 1 && !pret.rendu}">
