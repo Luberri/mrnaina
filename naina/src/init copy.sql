@@ -114,7 +114,12 @@ CREATE TABLE reservation_role (
     role_id INT NOT NULL REFERENCES role(id) ON DELETE CASCADE,
     nombre_livre_max INT NOT NULL CHECK (nombre_livre_max >= 0)
 );
-
+CREATE TABLE penalite (
+    id SERIAL PRIMARY KEY,
+    adherent_id INT NOT NULL REFERENCES adherent(id) ON DELETE CASCADE,
+    pret_id INT NOT NULL REFERENCES pret(id) ON DELETE CASCADE,
+    duree INT NOT NULL CHECK (duree >= 0)
+);
 -- Limites de prêt par rôle
 CREATE TABLE pret_role (
     id SERIAL PRIMARY KEY,
