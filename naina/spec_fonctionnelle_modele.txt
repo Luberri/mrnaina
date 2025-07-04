@@ -1,0 +1,304 @@
+# Modèle de spécification fonctionnelle pour chaque fonctionnalité
+
+## Fonctionnalité : [Nom de la fonctionnalité]
+
+### Règles de gestion :
+- [Règle 1]
+- [Règle 2]
+- [Règle 3]
+
+### Scénario nominal :
+1. [Acteur] se connecte.
+2. [Étape 2]
+3. [Étape 3]
+...
+N. [Dernière étape]
+
+### Traitement système :
+- [Traitement 1]
+- [Traitement 2]
+- [Traitement 3]
+
+### Résultat attendu :
+- [Résultat 1]
+- [Résultat 2]
+- [Résultat 3]
+
+---
+
+## Exemple : Retourner un livre
+
+### Règles de gestion :
+- Le livre doit être en prêt (Adhérent-Exemplaire avec dateRetour vide).
+- Si le retour est en retard → vérifier si pénalité applicable.
+- Vérifier si jour férié.
+
+### Scénario nominal :
+1. Bibliothécaire se connecte.
+2. Va dans « Gestion des retours ».
+3. Sélectionne l’adhérent ou le numéro d’exemplaire.
+4. Clique sur « Retourner ».
+5. Le système :
+   - Remplit dateRetour.
+   - Rend l’exemplaire disponible.
+   - Vérifie les retards → applique pénalité si besoin.
+
+### Résultat attendu :
+- Exemplaire disponible.
+- Prêt clôturé.
+- Pénalité éventuelle enregistrée dans Adhérent-Pénalité.
+
+---
+
+## Fonctionnalité : Gestion des adhérents
+
+### Règles de gestion :
+- Un adhérent doit avoir un nom, une date de naissance et un rôle valide.
+- Un adhérent ne peut pas être supprimé s'il a des prêts ou réservations en cours.
+
+### Scénario nominal :
+1. Bibliothécaire se connecte.
+2. Va dans « Gestion des adhérents ».
+3. Ajoute, modifie ou supprime un adhérent.
+4. Le système vérifie les règles et enregistre les modifications.
+
+### Traitement système :
+- Vérification des champs obligatoires.
+- Vérification des dépendances (prêts/réservations).
+- Enregistrement ou suppression de l’adhérent.
+
+### Résultat attendu :
+- Adhérent ajouté, modifié ou supprimé.
+- Message d’erreur si suppression impossible.
+
+---
+
+## Fonctionnalité : Gestion des livres
+
+### Règles de gestion :
+- Un livre doit avoir un titre, un auteur, un éditeur et une année de publication.
+- Un livre ne peut pas être supprimé s’il a des exemplaires ou des réservations.
+
+### Scénario nominal :
+1. Bibliothécaire se connecte.
+2. Va dans « Gestion des livres ».
+3. Ajoute, modifie ou supprime un livre.
+4. Le système vérifie les règles et enregistre les modifications.
+
+### Traitement système :
+- Vérification des champs obligatoires.
+- Vérification des dépendances (exemplaires/réservations).
+- Enregistrement ou suppression du livre.
+
+### Résultat attendu :
+- Livre ajouté, modifié ou supprimé.
+- Message d’erreur si suppression impossible.
+
+---
+
+## Fonctionnalité : Gestion des exemplaires
+
+### Règles de gestion :
+- Un exemplaire est lié à un livre existant.
+- Le nombre d’exemplaires disponibles doit être positif.
+
+### Scénario nominal :
+1. Bibliothécaire se connecte.
+2. Va dans « Gestion des exemplaires ».
+3. Ajoute, modifie ou supprime un exemplaire.
+4. Le système vérifie les règles et enregistre les modifications.
+
+### Traitement système :
+- Vérification du lien avec un livre.
+- Vérification du nombre disponible.
+- Enregistrement ou suppression de l’exemplaire.
+
+### Résultat attendu :
+- Exemplaire ajouté, modifié ou supprimé.
+
+---
+
+## Fonctionnalité : Gestion des catégories
+
+### Règles de gestion :
+- Une catégorie doit avoir un nom unique.
+- Un livre peut appartenir à plusieurs catégories.
+
+### Scénario nominal :
+1. Bibliothécaire se connecte.
+2. Va dans « Gestion des catégories ».
+3. Ajoute, modifie ou supprime une catégorie.
+4. Le système vérifie les règles et enregistre les modifications.
+
+### Traitement système :
+- Vérification du nom unique.
+- Mise à jour des associations livre-catégorie.
+
+### Résultat attendu :
+- Catégorie ajoutée, modifiée ou supprimée.
+
+---
+
+## Fonctionnalité : Gestion des abonnements
+
+### Règles de gestion :
+- Un adhérent doit être abonné pour emprunter ou réserver.
+- Un abonnement est lié à un adhérent et une date.
+
+### Scénario nominal :
+1. Adhérent ou bibliothécaire se connecte.
+2. Va dans « Abonnement ».
+3. Souscrit ou renouvelle un abonnement.
+4. Le système vérifie les règles et enregistre l’abonnement.
+
+### Traitement système :
+- Vérification de l’état d’abonnement.
+- Enregistrement ou renouvellement de l’abonnement.
+
+### Résultat attendu :
+- Abonnement actif pour l’adhérent.
+
+---
+
+## Fonctionnalité : Gestion des prêts
+
+### Règles de gestion :
+- Un exemplaire ne peut être prêté que s’il est disponible.
+- Un adhérent ne peut pas dépasser le nombre de prêts autorisé par son rôle.
+- La durée du prêt dépend du rôle.
+
+### Scénario nominal :
+1. Bibliothécaire se connecte.
+2. Va dans « Gestion des prêts ».
+3. Sélectionne l’adhérent et l’exemplaire.
+4. Définit la date de retour prévue.
+5. Le système vérifie les règles et enregistre le prêt.
+
+### Traitement système :
+- Vérification de la disponibilité de l’exemplaire.
+- Vérification du nombre de prêts en cours.
+- Calcul de la date de retour selon le rôle.
+- Enregistrement du prêt et mise à jour de la disponibilité.
+
+### Résultat attendu :
+- Prêt enregistré.
+- Exemplaire non disponible.
+
+---
+
+## Fonctionnalité : Gestion des retours
+
+### Règles de gestion :
+- Le livre doit être en prêt (Adhérent-Exemplaire avec dateRetour vide).
+- Si le retour est en retard → vérifier si pénalité applicable.
+- Vérifier si jour férié.
+
+### Scénario nominal :
+1. Bibliothécaire se connecte.
+2. Va dans « Gestion des retours ».
+3. Sélectionne l’adhérent ou le numéro d’exemplaire.
+4. Clique sur « Retourner ».
+5. Le système :
+   - Remplit dateRetour.
+   - Rend l’exemplaire disponible.
+   - Vérifie les retards → applique pénalité si besoin.
+
+### Résultat attendu :
+- Exemplaire disponible.
+- Prêt clôturé.
+- Pénalité éventuelle enregistrée dans Adhérent-Pénalité.
+
+---
+
+## Fonctionnalité : Gestion des prolongements de prêt
+
+### Règles de gestion :
+- Un prêt peut être prolongé selon le rôle et le nombre de jours autorisé.
+- Un prêt déjà rendu ne peut pas être prolongé.
+
+### Scénario nominal :
+1. Adhérent ou bibliothécaire se connecte.
+2. Va dans « Mes prêts » ou « Gestion des prêts ».
+3. Sélectionne un prêt en cours.
+4. Demande un prolongement.
+5. Le système vérifie les règles et applique la prolongation si possible.
+
+### Traitement système :
+- Vérification du statut du prêt.
+- Vérification du nombre de jours autorisé.
+- Mise à jour de la date de retour.
+
+### Résultat attendu :
+- Prêt prolongé ou message d’erreur si refus.
+
+---
+
+## Fonctionnalité : Gestion des réservations
+
+### Règles de gestion :
+- Un adhérent doit être abonné et non pénalisé pour réserver.
+- Un livre ne peut pas être réservé si déjà réservé et confirmé pour la même date.
+- Un adhérent ne peut pas dépasser le nombre de réservations autorisé par son rôle.
+- Impossible de réserver un jour férié.
+
+### Scénario nominal :
+1. Adhérent ou bibliothécaire se connecte.
+2. Va dans « Réserver un livre ».
+3. Sélectionne le livre et la date.
+4. Le système vérifie les règles et enregistre la réservation.
+
+### Traitement système :
+- Vérification de l’abonnement et des pénalités.
+- Vérification de la disponibilité du livre à la date.
+- Vérification du nombre de réservations en cours.
+- Vérification du jour férié.
+- Enregistrement de la réservation et du statut initial.
+
+### Résultat attendu :
+- Réservation enregistrée ou message d’erreur.
+
+---
+
+## Fonctionnalité : Gestion des pénalités
+
+### Règles de gestion :
+- Un adhérent en retard ou ayant enfreint une règle reçoit une pénalité.
+- Un adhérent pénalisé ne peut pas réserver ni emprunter.
+
+### Scénario nominal :
+1. Bibliothécaire se connecte.
+2. Va dans « Gestion des pénalités ».
+3. Consulte ou applique une pénalité à un adhérent.
+
+### Traitement système :
+- Détection automatique des retards.
+- Application de la pénalité.
+- Blocage des actions de l’adhérent pénalisé.
+
+### Résultat attendu :
+- Pénalité enregistrée.
+- Adhérent bloqué pour réservation/emprunt.
+
+---
+
+## Fonctionnalité : Gestion des jours fériés
+
+### Règles de gestion :
+- Un jour férié ne peut pas être réservé ni utilisé comme date de retour.
+- Les jours fériés sont définis par l’administrateur.
+
+### Scénario nominal :
+1. Administrateur se connecte.
+2. Va dans « Gestion des jours fériés ».
+3. Ajoute, modifie ou supprime un jour férié.
+4. Le système vérifie les règles et enregistre la modification.
+
+### Traitement système :
+- Vérification de l’unicité de la date.
+- Blocage des réservations et retours sur ces dates.
+
+### Résultat attendu :
+- Jour férié ajouté, modifié ou supprimé.
+- Réservations et retours impossibles à cette date.
+
+---

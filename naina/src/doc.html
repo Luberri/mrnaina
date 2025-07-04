@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spécifications Fonctionnelles - Système de Bibliothèque</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        .container {
+            background-color: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+        h2 {
+            color: #34495e;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            border-left: 4px solid #3498db;
+            padding-left: 15px;
+        }
+        h3 {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+        .template {
+            background-color: #ecf0f1;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+            border-left: 4px solid #95a5a6;
+        }
+        .example {
+            background-color: #e8f5e8;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+            border-left: 4px solid #27ae60;
+        }
+        .function {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 25px;
+            border: 1px solid #dee2e6;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 5px;
+        }
+        ol {
+            padding-left: 20px;
+        }
+        ol li {
+            margin-bottom: 8px;
+        }
+        .separator {
+            border-top: 2px solid #bdc3c7;
+            margin: 30px 0;
+        }
+        .download-btn {
+            background-color: #3498db;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+        .download-btn:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Modèle de spécification fonctionnelle pour chaque fonctionnalité</h1>
+        
+        <div class="template">
+            <h2>Fonctionnalité : [Nom de la fonctionnalité]</h2>
+            
+            <h3>Règles de gestion :</h3>
+            <ul>
+                <li>[Règle 1]</li>
+                <li>[Règle 2]</li>
+                <li>[Règle 3]</li>
+            </ul>
+            
+            <h3>Scénario nominal :</h3>
+            <ol>
+                <li>[Acteur] se connecte.</li>
+                <li>[Étape 2]</li>
+                <li>[Étape 3]</li>
+                <li>...</li>
+                <li>[Dernière étape]</li>
+            </ol>
+            
+            <h3>Traitement système :</h3>
+            <ul>
+                <li>[Traitement 1]</li>
+                <li>[Traitement 2]</li>
+                <li>[Traitement 3]</li>
+            </ul>
+            
+            <h3>Résultat attendu :</h3>
+            <ul>
+                <li>[Résultat 1]</li>
+                <li>[Résultat 2]</li>
+                <li>[Résultat 3]</li>
+            </ul>
+        </div>
+        
+        <div class="separator"></div>
+        
+        <div class="example">
+            <h2>Exemple : Retourner un livre</h2>
+            
+            <h3>Règles de gestion :</h3>
+            <ul>
+                <li>Le livre doit être en prêt (Adhérent-Exemplaire avec dateRetour vide).</li>
+                <li>Si le retour est en retard → vérifier si pénalité applicable.</li>
+                <li>Vérifier si jour férié.</li>
+            </ul>
+            
+            <h3>Scénario nominal :</h3>
+            <ol>
+                <li>Bibliothécaire se connecte.</li>
+                <li>Va dans « Gestion des retours ».</li>
+                <li>Sélectionne l'adhérent ou le numéro d'exemplaire.</li>
+                <li>Clique sur « Retourner ».</li>
+                <li>Le système :
+                    <ul>
+                        <li>Remplit dateRetour.</li>
+                        <li>Rend l'exemplaire disponible.</li>
+                        <li>Vérifie les retards → applique pénalité si besoin.</li>
+                    </ul>
+                </li>
+            </ol>
+            
+            <h3>Résultat attendu :</h3>
+            <ul>
+                <li>Exemplaire disponible.</li>
+                <li>Prêt clôturé.</li>
+                <li>Pénalité éventuelle enregistrée dans Adhérent-Pénalité.</li>
+            </ul>
+        </div>
+        
+        <div class="separator"></div>
+        
+        <div class="function">
+            <h2>Fonctionnalité : Gestion des adhérents</h2>
+            
+            <h3>Règles de gestion :</h3>
+            <ul>
+                <li>Un adhérent doit avoir un nom, une date de naissance et un rôle valide.</li>
+                <li>Un adhérent ne peut pas être supprimé s'il a des prêts ou réservations en cours.</li>
+            </ul>
+            
+            <h3>Scénario nominal :</h3>
+            <ol>
+                <li>Bibliothécaire se connecte.</li>
+                <li>Va dans « Gestion des adhérents ».</li>
+                <li>Ajoute, modifie ou supprime un adhérent.</li>
+                <li>Le système vérifie les règles et enregistre les modifications.</li>
+            </ol>
+            
+            <h3>Traitement système :</h3>
+            <ul>
+                <li>Vérification des champs obligatoires.</li>
+                <li>Vérification des dépendances (prêts/réservations).</li>
+                <li>Enregistrement ou suppression de l'adhérent.</li>
+            </ul>
+            
+            <h3>Résultat attendu :</h3>
+            <ul>
+                <li>Adhérent ajouté, modifié ou supprimé.</li>
+                <li>Message d'erreur si suppression impossible.</li>
+            </ul>
+        </div>
+        
+        <div class="function">
+            <h2>Fonctionnalité : Gestion des livres</h2>
+            
+            <h3>Règles de gestion :</h3>
+            <ul>
+                <li>Un livre doit avoir un titre, un auteur, un éditeur et une année de publication.</li>
+                <li>Un livre ne peut pas être supprimé s'il a des exemplaires ou des réservations.</li>
+            </ul>
+            
+            <h3>Scénario nominal :</h3>
+            <ol>
+                <li>Bibliothécaire se connecte.</li>
+                <li>Va dans « Gestion des livres ».</li>
+                <li>Ajoute, modifie ou supprime un livre.</li>
+                <li>Le système vérifie les règles et enregistre les modifications.</li>
+            </ol>
+            
+            <h3>Traitement système :</h3>
+            <ul>
+                <li>Vérification des champs obligatoires.</li>
+                <li>Vérification des dépendances (exemplaires/réservations).</li>
+                <li>Enregistrement ou suppression du livre.</li>
+            </ul>
+            
+            <h3>Résultat attendu :</h3>
+            <ul>
+                <li>Livre ajouté, modifié ou supprimé.</li>
+                <li>Message d'erreur si suppression impossible.</li>
+            </ul>
+        </div>
+        
+        <div class="function">
+            <h2>Fonctionnalité : Gestion des exemplaires</h2>
+            
+            <h3>Règles de gestion :</h3>
+            <ul>
+                <li>Un exemplaire est lié à un livre existant.</li>
+                <li>Le nombre d'exemplaires disponibles doit être positif.</li>
+            </ul>
+            
+            <h3>Scénario nominal :</h3>
+            <ol>
+                <li>Bibliothécaire se connecte.</li>
+                <li>Va dans « Gestion des exemplaires ».</li>
+                <li>Ajoute, modifie ou supprime un exemplaire.</li>
+                <li>Le système vérifie les règles et enregistre les modifications.</li>
+            </ol>
+            
+            <h3>Traitement système :</h3>
+            <ul>
+                <li>Vérification du lien avec un livre.</li>
+                <li>Vérification du nombre disponible.</li>
+                <li>Enregistrement ou suppression de l'exemplaire.</li>
+            </ul>
+            
+            <h3>Résultat attendu :</h3>
+            <ul>
+                <li>Exemplaire ajouté, modifié ou supprimé.</li>
+            </ul>
+        </div>
+        
+        <div class="function">
+            <h2>Fonctionnalité : Gestion des catégories</h2>
+            
+            <h3>Règles de gestion :</h3>
+            <ul>
+                <li>Une catégorie doit avoir un nom unique.</li>
+                <li>Un livre peut appartenir à plusieurs catégories.</li>
+            </ul>
+            
+            <h3>Scénario nominal :</h3>
+            <ol>
+                <li>Bibliothécaire se connecte.</li>
+                <li>Va dans « Gestion des catégories ».</li>
+                <li>Ajoute, modifie ou supprime une catégorie.</li>
+                <li>Le système vérifie les règles et enregistre les modifications.</li>
+            </ol>
+            
+            <h3>Traitement système :</h3>
+            <ul>
+                <li>Vérification du nom unique.</li>
+                <li>Mise à jour des associations livre-catégorie.</li>
+            </ul>
+            
+            <h3>Résultat attendu :</h3>
+            <ul>
+                <li>Catégorie ajoutée, modifiée ou supprimée.</li>
+            </ul>
+        </div>
+        
+        <div class="function">
+            <h2>Fonctionnalité : Gestion des abonnements</h2>
+            
+            <h3>Règles de gestion :</h3>
+            <ul>
+                <li>Un adhérent doit être abonné pour emprunter ou réserver.</li>
+                <li>Un abonnement est lié à un adhérent et une date.</li>
+            </ul>
+            
+            <h3>Scénario nominal :</h3>
+            <ol>
+                <li>Adhérent ou bibliothécaire se connecte.</li>
+                <li>Va dans « Abonnement ».</li>
+                <li>Souscrit ou renouvelle un abonnement.</li>
+                <li>Le système vérifie les règles et enregistre l'abonnement.</li>
+            </ol>
+            
+            <h3>Traitement système :</h3>
+            <ul>
+                <li>Vérification de l'état d'abonnement.</li>
+                <li>Enregistrement ou renouvellement de l'abonnement.</li>
+            </ul>
+            
+            <h3>Résultat attendu :</h3>
+            <ul>
+                <li>Abonnement actif pour l'adhérent.</li>
+            </ul>
+        </div>
+        
+        <div class="function">
+            <h2>Fonctionnalité : Gestion des prêts</h2>
+            
+            <h3>Règles de gestion :</h3>
+            <ul>
+                <li>Un exemplaire ne peut être prêté que s'il est disponible.</li>
+                <li>Un adhérent ne peut pas dépasser le nombre de prêts autorisé par son rôle.</li>
+                <li>La durée du prêt dépend du rôle.</li>
+            </ul>
+            
+            <h3>Scénario nominal :</h3>
+            <ol>
+                <li>Bibliothécaire se connecte.</li>
+                <li>Va dans « Gestion des prêts ».</li>
+                <li>Sélectionne l'adhérent et l'exemplaire.</li>
+                <li>Définit la date de retour prévue.</li>
+                <li>Le système vérifie les règles et enregistre le prêt.</li>
+            </ol>
+            
+            <h3>Traitement système :</h3>
+            <ul>
+                <li>Vérification de la disponibilité de l'exemplaire.</li>
+                <li>Vérification du nombre de prêts en cours.</li>
+                <li>Calcul de la date de retour selon le rôle.</li>
+                <li>Enregistrement du prêt et mise à jour de la disponibilité.</li>
+            </ul>
+            
+            <h3>Résultat attendu :</h3>
+            <ul>
+                <li>Prêt enregistré.</li>
+                <li>Exemplaire non disponible.</li>
+            </ul>
+        </div>
+        
+        <div class="function">
+            <h2>Fonctionnalité : Gestion des retours</h2>
+            
+            <h3>Règles de gestion :</h3>
+            <ul>
+                <li>Le livre doit être en prêt (Adhérent-Exemplaire avec dateRetour vide).</li>
+                <li>Si le retour est en retard → vérifier si pénalité applicable.</li>
+                <li>Vérifier si jour férié.</li>
+            </ul>
+            
+            <h3>Scénario nominal :</h3>
+            <ol>
+                <li>Bibliothécaire se connecte.</li>
+                <li>Va dans « Gestion des retours ».</li>
+                <li>Sélectionne l'adhérent ou le numéro d'exemplaire.</li>
+                <li>Clique sur « Retourner ».</li>
+                <li>Le système :
+                    <ul>
+                        <li>Remplit dateRetour.</li>
+                        <li>Rend l'exemplaire disponible.</li>
+                        <li>Vérifie les retards → applique pénalité si besoin.</li>
+                    </ul>
+                </li>
+            </ol>
+            
+            <h3>Résultat attendu :</h3>
+            <ul>
+                <li>Exemplaire disponible.</li>
+                <li>Prêt clôturé.</li>
+                <li>Pénalité éventuelle enregistrée dans Adhérent-Pénalité.</li>
+            </ul>
+        </div>
+        
+        <div class="function">
+            <h2>Fonctionnalité : Gestion des prolongements de prêt</h2>
+            
+            <h3>Règles de gestion :</h3>
+            <ul>
+                <li>Un prêt peut être prolongé selon le rôle et le nombre de jours autorisé.</li>
+                <li>Un prêt déjà rendu ne peut pas être prolongé.</li>
+            </ul>
+            
+            <h3>Scénario nominal :</h3>
+            <ol>
+                <li>Adhérent ou bibliothécaire se connecte.</li>
+                <li>Va dans « Mes prêts » ou « Gestion des prêts ».</li>
+                <li>Sélectionne un prêt en cours.</li>
+                <li>Demande un prolongement.</li>
+                <li>Le système vérifie les règles et applique la prolongation si possible.</li>
+            </ol>
+            
+            <h3>Traitement système :</h3>
+            <ul>
+                <li>Vérification du statut du prêt.</li>
+                <li>Vérification du nombre de jours autorisé.</li>
+                <li>Mise à jour de la date de retour.</li>
+            </ul>
+            
+            <h3>Résultat attendu :</h3>
+            <ul>
+                <li>Prêt prolongé ou message d'erreur si refus.</li>
+            </ul>
+        </div>
+        
+        <div class="function">
+            <h2>Fonctionnalité : Gestion des réservations</h2>
+            
+            <h3>Règles de gestion :</h3>
+            <ul>
+                <li>Un adhérent doit être abonné et non pénalisé pour réserver.</li>
+                <li>Un livre ne peut pas être réservé si déjà réservé et confirmé pour la même date.</li>
+                <li>Un adhérent ne peut pas dépasser le nombre de réservations autorisé par son rôle.</li>
+                <li>Impossible de réserver un jour férié.</li>
+            </ul>
+            
+            <h3>Scénario nominal :</h3>
+            <ol>
+                <li>Adhérent ou bibliothécaire se connecte.</li>
+                <li>Va dans « Réserver un livre ».</li>
+                <li>Sélectionne le livre et la date.</li>
+                <li>Le système vérifie les règles et enregistre la réservation.</li>
+            </ol>
+            
+            <h3>Traitement système :</h3>
+            <ul>
+                <li>Vérification de l'abonnement et des pénalités.</li>
+                <li>Vérification de la disponibilité du livre à la date.</li>
+                <li>Vérification du nombre de réservations en cours.</li>
+                <li>Vérification du jour férié.</li>
+                <li>Enregistrement de la réservation et du statut initial.</li>
+            </ul>
+            
+            <h3>Résultat attendu :</h3>
+            <ul>
+                <li>Réservation enregistrée ou message d'erreur.</li>
+            </ul>
+        </div>
+        
+        <div class="function">
+            <h2>Fonctionnalité : Gestion des pénalités</h2>
+            
+            <h3>Règles de gestion :</h3>
+            <ul>
+                <li>Un adhérent en retard ou ayant enfreint une règle reçoit une pénalité.</li>
+                <li>Un adhérent pénalisé ne peut pas réserver ni emprunter.</li>
+            </ul>
+            
+            <h3>Scénario nominal :</h3>
+            <ol>
+                <li>Bibliothécaire se connecte.</li>
+                <li>Va dans « Gestion des pénalités ».</li>
+                <li>Consulte ou applique une pénalité à un adhérent.</li>
+            </ol>
+            
+            <h3>Traitement système :</h3>
+            <ul>
+                <li>Détection automatique des retards.</li>
+                <li>Application de la pénalité.</li>
+                <li>Blocage des actions de l'adhérent pénalisé.</li>
+            </ul>
+            
+            <h3>Résultat attendu :</h3>
+            <ul>
+                <li>Pénalité enregistrée.</li>
+                <li>Adhérent bloqué pour réservation/emprunt.</li>
+            </ul>
+        </div>
+        
+        <div class="function">
+            <h2>Fonctionnalité : Gestion des jours fériés</h2>
+            
+            <h3>Règles de gestion :</h3>
+            <ul>
+                <li>Un jour férié ne peut pas être réservé ni utilisé comme date de retour.</li>
+                <li>Les jours fériés sont définis par l'administrateur.</li>
+            </ul>
+            
+            <h3>Scénario nominal :</h3>
+            <ol>
+                <li>Administrateur se connecte.</li>
+                <li>Va dans « Gestion des jours fériés ».</li>
+                <li>Ajoute, modifie ou supprime un jour férié.</li>
+                <li>Le système vérifie les règles et enregistre la modification.</li>
+            </ol>
+            
+            <h3>Traitement système :</h3>
+            <ul>
+                <li>Vérification de l'unicité de la date.</li>
+                <li>Blocage des réservations et retours sur ces dates.</li>
+            </ul>
+            
+            <h3>Résultat attendu :</h3>
+            <ul>
+                <li>Jour férié ajouté, modifié ou supprimé.</li>
+                <li>Réservations et retours impossibles à cette date.</li>
+            </ul>
+        </div>
+        
+        <button class="download-btn" onclick="downloadAsWord()">📄 Télécharger en Word (.docx)</button>
+    </div>
+    
+    <script>
+        function downloadAsWord() {
+            // Créer le contenu HTML pour Word
+            const content = document.querySelector('.container').innerHTML;
+            
+            // Créer un blob avec le contenu HTML formaté pour Word
+            const htmlContent = `
+                <html xmlns:o="urn:schemas-microsoft-com:office:office"
+                      xmlns:w="urn:schemas-microsoft-com:office:word"
+                      xmlns="http://www.w3.org/TR/REC-html40">
+                <head>
+                    <meta charset="utf-8">
+                    <title>Spécifications Fonctionnelles</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; line-height: 1.6; margin: 20px; }
+                        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+                        h2 { color: #34495e; margin-top: 30px; border-left: 4px solid #3498db; padding-left: 15px; }
+                        h3 { color: #2c3e50; margin-top: 25px; }
+                        .template { background-color: #ecf0f1; padding: 20px; margin-bottom: 30px; }
+                        .example { background-color: #e8f5e8; padding: 20px; margin-bottom: 30px; }
+                        .function { background-color: #f8f9fa; padding: 20px; margin-bottom: 25px; border: 1px solid #dee2e6; }
+                        ul, ol { padding-left: 20px; }
+                        li { margin-bottom: 5px; }
+                        .separator { border-top: 2px solid #bdc3c7; margin: 30px 0; }
+                        .download-btn { display: none; }
+                    </style>
+                </head>
+                <body>
+                    ${content}
+                </body>
+                </html>
+            `;
+            
+            const blob = new Blob([htmlContent], { type: 'application/msword' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'specifications_fonctionnelles.docx';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>

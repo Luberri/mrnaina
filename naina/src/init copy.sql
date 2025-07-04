@@ -85,7 +85,11 @@ CREATE TABLE pret_jour (
     role_id INT NOT NULL REFERENCES role(id) ON DELETE CASCADE,
     nombre_jour INT NOT NULL CHECK (nombre_jour > 0)
 );
-
+CREATE TABLE jour_ferier (
+    id SERIAL PRIMARY KEY,
+    date DATE NOT NULL UNIQUE,
+    description VARCHAR(255)
+);
 -- Abonnement des adhérents
 CREATE TABLE abonnement (
     id SERIAL PRIMARY KEY,

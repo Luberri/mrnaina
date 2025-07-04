@@ -32,6 +32,8 @@ public class ReservationController {
     private com.bibliotheque.naina.service.ReservationRoleService reservationRoleService;
     @Autowired
     private com.bibliotheque.naina.service.PenaliteService penaliteService;
+    @Autowired
+    private com.bibliotheque.naina.service.JourFerierService jourFerierService;
 
     @GetMapping("/reservations")
     public String listeReservations(Model model) {
@@ -67,6 +69,8 @@ public class ReservationController {
             model.addAttribute("error", "Vous devez être abonné ce mois pour réserver.");
         } else if (penaliteService.estEncorePenalise(adherentId)) {
             model.addAttribute("error", "Vous êtes encore pénalisé et ne pouvez pas réserver.");
+        } else if (jourFerierService.findByDate(date).isPresent()) {
+            model.addAttribute("error", "Impossible de réserver à cette date : c'est un jour férié.");
         } else {
             // Règle 2 : Vérifier si le livre est déjà réservé (statut 'confirmée') pour cette date
             boolean dejaReserve = reservationService.findAll().stream()
