@@ -83,6 +83,24 @@ public class PretController {
         if (adherent != null && mode != null && adherent.getRole().getId() == 5L && mode.getId() == 1L) {
             model.addAttribute("error", "Un adhérent anonyme ne peut pas emprunter à domicile.");
         } else {
+            // Règle : moins de 18 ans, interdit catégorie 4
+            Exemplaire exemplaire = exemplaireService.findById(exemplaireId).orElse(null);
+            if (adherent != null && exemplaire != null) {
+                java.time.LocalDate today = java.time.LocalDate.now();
+                int age = java.time.Period.between(adherent.getDateNaissance(), today).getYears();
+                var livre = exemplaire.getLivre();
+                // Vérifie si le livre est dans la catégorie 4
+                boolean isCategorie4 = livre.getCategories().stream().anyMatch(cat -> cat.getId() == 4L);
+                if (age < 18 && isCategorie4) {
+                    model.addAttribute("error", "Vous devez avoir au moins 18 ans pour emprunter un livre de cette catégorie.");
+                    model.addAttribute("adherents", adherentService.findAll());
+                    model.addAttribute("exemplaires", exemplaireService.findAll());
+                    model.addAttribute("modes", modeService.findAll());
+                    model.addAttribute("body", "pret_form.jsp");
+                    return "layout";
+                }
+            }
+
             String erreur = pretService.verifierPret(adherentId);
             if (erreur != null) {
                 model.addAttribute("error", erreur);
@@ -90,7 +108,7 @@ public class PretController {
                 try {
                     Pret pret = new Pret();
                     pret.setAdherent(adherent);
-                    pret.setExemplaire(exemplaireService.findById(exemplaireId).orElse(null));
+                    pret.setExemplaire(exemplaire);
                     pret.setMode(mode);
 
                     String message;
@@ -99,7 +117,7 @@ public class PretController {
                         message = "ok, À rendre avant la fermeture du bibliothèque.";
                     } else {
                         Integer nombreJour = pretService.getNombreJourPourRole(adherent.getRole().getId());
-                       if (nombreJour == null) {
+                        if (nombreJour == null) {
                             model.addAttribute("error", "Aucune durée de prêt définie pour ce rôle.");
                             model.addAttribute("adherents", adherentService.findAll());
                             model.addAttribute("exemplaires", exemplaireService.findAll());

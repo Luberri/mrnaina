@@ -3,6 +3,8 @@ package com.bibliotheque.naina.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.List;
+
 @Entity
 @Table(name = "livre")
 @Data
@@ -22,4 +24,15 @@ public class Livre {
 
     @Column(name = "annee_publication")
     private Integer anneePublication;
+
+    @OneToMany(mappedBy = "livre")
+    private List<LivreCategorie> livreCategories;
+
+    // Retourne la liste des catégories associées à ce livre
+    public List<Categorie> getCategories() {
+        if (livreCategories == null) return java.util.Collections.emptyList();
+        return livreCategories.stream()
+                .map(LivreCategorie::getCategorie)
+                .toList();
+    }
 }
