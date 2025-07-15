@@ -17,4 +17,8 @@ public class PretRole {
 
     @Column(name = "nombre_livre_max", nullable = false)
     private Integer nombreLivreMax;
+
+    public Integer getNombreLivreMax() {
+        return nombreLivreMax;
+    }
 }

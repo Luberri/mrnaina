@@ -19,6 +19,10 @@ public class Adherent {
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
+    public Role getRole() {
+        return role;
+    }
+
     @Column(name = "date_naissance", nullable = false)
     private LocalDate dateNaissance;
 }
