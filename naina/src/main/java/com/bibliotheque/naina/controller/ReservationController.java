@@ -65,8 +65,6 @@ public class ReservationController {
         // Règle 1 : L'adhérent doit être abonné ce mois
         if (adherent == null || livre == null) {
             model.addAttribute("error", "Paramètres invalides.");
-        } else if (java.time.Period.between(adherent.getDateNaissance(), java.time.LocalDate.now()).getYears() < 18) {
-            model.addAttribute("error", "Vous devez avoir au moins 18 ans pour réserver.");
         } else if (!abonnementService.estAbonneCeMois(adherentId)) {
             model.addAttribute("error", "Vous devez être abonné ce mois pour réserver.");
         } else if (penaliteService.estEncorePenalise(adherentId)) {

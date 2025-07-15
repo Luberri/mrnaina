@@ -9,6 +9,13 @@ import java.util.List;
 @Table(name = "livre")
 @Data
 public class Livre {
+    public String getTitre() { return titre; }
+    public String getAuteur() { return auteur; }
+    public String getEditeur() { return editeur; }
+    public Integer getAnneePublication() { return anneePublication; }
+    public Long getId() {
+        return id;
+    }
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

@@ -30,8 +30,8 @@
             </c:forEach>
         </select><br>
 
-        <label for="datePret">Date retour :</label>
-        <input type="date" name="datePret" id="datePret"><br>
+        <label for="datePret">Date du prêt :</label>
+        <input type="date" name="datePret" id="datePret" required><br>
 
         <button class="btn" type="submit">Valider</button>
     </form>
