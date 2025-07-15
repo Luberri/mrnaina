@@ -10,7 +10,6 @@ import com.bibliotheque.naina.service.ExemplaireService;
 import com.bibliotheque.naina.service.LivreCategorieService;
 import com.bibliotheque.naina.model.Livre;
 import com.bibliotheque.naina.model.LivreCategorie;
-import com.bibliotheque.naina.model.VueNombreExemplairesDisponibles;
 import com.bibliotheque.naina.service.VueNombreExemplairesDisponiblesService;
 import java.util.*;
 import java.util.stream.Collectors;

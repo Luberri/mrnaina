@@ -10,20 +10,6 @@
     <title>Liste des livres</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-            color: #333;
-        }
-
         .container {
             max-width: 1400px;
             margin: 0 auto;
@@ -33,15 +19,6 @@
             text-align: center;
             margin-bottom: 40px;
         }
-
-        .header h1 {
-            color: white;
-            font-size: 2.5rem;
-            font-weight: 300;
-            margin-bottom: 10px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-        }
-
         .search-container {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
@@ -290,9 +267,6 @@
                 color: black;
             }
             
-            body {
-                padding: 10px;
-            }
         }
 
         @media (max-width: 480px) {
@@ -379,7 +353,7 @@
                 </c:when>
                 <c:otherwise>
                     <div class="empty-state">
-                        <h3>🔍 Aucun livre trouvé</h3>
+                        <h3 style="color:black">🔍 Aucun livre trouvé</h3>
                         <p>Essayez de modifier vos critères de recherche</p>
                     </div>
                 </c:otherwise>

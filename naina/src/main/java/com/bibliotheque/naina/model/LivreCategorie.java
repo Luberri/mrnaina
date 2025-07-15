@@ -13,6 +13,7 @@ public class LivreCategorie {
     @ManyToOne
     @MapsId("livreId")
     @JoinColumn(name = "livre_id")
+    @com.fasterxml.jackson.annotation.JsonIgnore
     private Livre livre;
 
     @ManyToOne

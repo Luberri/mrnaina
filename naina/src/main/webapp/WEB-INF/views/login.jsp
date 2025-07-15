@@ -255,10 +255,12 @@
     <!-- Particules décoratives -->
     <div class="particles">
         <div class="particle" style="left: 10%; top: 20%; width: 6px; height: 6px; animation-delay: 0s;"></div>
-        <div class="particle" style="left: 20%; top: 60%; width: 4px; height: 4px; animation-delay: 2s;"></div>
+        <div class="particle" style="left: 20%; top: 60%; width: 14px; height: 14px; animation-delay: 2s;"></div>
         <div class="particle" style="left: 80%; top: 30%; width: 8px; height: 8px; animation-delay: 4s;"></div>
-        <div class="particle" style="left: 90%; top: 70%; width: 5px; height: 5px; animation-delay: 1s;"></div>
-        <div class="particle" style="left: 30%; top: 80%; width: 7px; height: 7px; animation-delay: 3s;"></div>
+        <div class="particle" style="left: 90%; top: 70%; width: 20px; height: 20px; animation-delay: 1s;"></div>
+        <div class="particle" style="left: 30%; top: 80%; width: 60px; height: 60px; animation-delay: 3s;"></div>
+        <div class="particle" style="left: 70%; top: 70%; width: 10px; height: 10px; animation-delay: 3s;"></div>
+        <div class="particle" style="left: 3%; top: 98%; width: 20px; height: 20px; animation-delay: 5s;"></div>
     </div>
 
     <div class="login-container">
