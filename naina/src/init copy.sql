@@ -68,6 +68,7 @@ CREATE TABLE pret (
     exemplaire_id INT NOT NULL REFERENCES exemplaire(id) ON DELETE CASCADE,
     adherent_id INT NOT NULL REFERENCES adherent(id) ON DELETE CASCADE,
     mode_id INT NOT NULL REFERENCES mode(id) ON DELETE SET NULL,
+    date_pret DATE NOT NULL,
     date_retour DATE NOT NULL,
     date_retour_reel DATE,
     prolongement_jour INT DEFAULT 0 CHECK (prolongement_jour >= 0),

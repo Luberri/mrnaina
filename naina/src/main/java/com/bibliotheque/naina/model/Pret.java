@@ -24,6 +24,9 @@ public class Pret {
     @JoinColumn(name = "mode_id", nullable = false)
     private Mode mode;
 
+    @Column(name = "date_pret", nullable = false)
+    private LocalDate datePret;
+
     @Column(name = "date_retour", nullable = false)
     private LocalDate dateRetour;
 

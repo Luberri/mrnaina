@@ -88,3 +88,29 @@ INSERT INTO prolongement_role (role_id, nombre_jour) VALUES (2, 7);
 INSERT INTO prolongement_role (role_id, nombre_jour) VALUES (3, 10);
 INSERT INTO prolongement_role (role_id, nombre_jour) VALUES (4, 15);
 INSERT INTO prolongement_role (role_id, nombre_jour) VALUES (5, 20);
+
+INSERT INTO livre (titre, auteur, editeur, annee_publication) 
+VALUES 
+('1984', 'George Orwell', 'Secker & Warburg', 1949),
+('La Peste', 'Albert Camus', 'Gallimard', 1947),
+('Brief History of Time', 'Stephen Hawking', 'Bantam Books', 1988),
+('Sapiens', 'Yuval Noah Harari', 'Albin Michel', 2011),
+('L''Etranger', 'Albert Camus', 'Gallimard', 1942),
+('Le Rouge et le Noir', 'Stendhal', 'Levasseur', 1830),
+('Cosmos', 'Carl Sagan', 'Random House', 1980),
+('Homo Deus', 'Yuval Noah Harari', 'Harvill Secker', 2015),
+('L''Art de la Guerre', 'Sun Tzu', 'Flammarion', -500),
+('La Vie sexuelle de Catherine M.', 'Catherine Millet', 'Seuil', 2001);
+
+INSERT INTO livre_categorie (livre_id, categorie_id)
+VALUES
+    (5, 3), 
+    (6, 1), 
+    (7, 2),  
+    (8, 2), 
+    (9, 1), 
+    (10, 1),
+    (11, 2),
+    (12, 2), 
+    (13, 3), 
+    (14, 4); 
