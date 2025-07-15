@@ -30,6 +30,9 @@
             </c:forEach>
         </select><br>
 
+        <label for="datePret">Date retour :</label>
+        <input type="date" name="datePret" id="datePret"><br>
+
         <button class="btn" type="submit">Valider</button>
     </form>
     <script>

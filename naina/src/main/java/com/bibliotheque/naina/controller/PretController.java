@@ -69,6 +69,7 @@ public class PretController {
             @RequestParam Long adherentId,
             @RequestParam Long exemplaireId,
             @RequestParam Long modeId,
+            @RequestParam("datePret") String datePretStr,
             Model model
     ) {
         Adherent adherent = adherentService.findById(adherentId).orElse(null);
@@ -119,10 +120,12 @@ public class PretController {
                     pret.setAdherent(adherent);
                     pret.setExemplaire(exemplaire);
                     pret.setMode(mode);
+                    // Ajout de la date du prêt
+                    pret.setDatePret(LocalDate.parse(datePretStr));
 
                     String message;
                     if (mode.getId() == 2L) {
-                        pret.setDateRetour(LocalDate.now().plusDays(1));
+                        pret.setDateRetour(pret.getDatePret().plusDays(1));
                         message = "ok, À rendre avant la fermeture du bibliothèque.";
                     } else {
                         Integer nombreJour = pretService.getNombreJourPourRole(adherent.getRole().getId());
@@ -134,7 +137,7 @@ public class PretController {
                             model.addAttribute("body", "pret_form.jsp");
                             return "layout";
                         }
-                        pret.setDateRetour(LocalDate.now().plusDays(nombreJour));
+                        pret.setDateRetour(pret.getDatePret().plusDays(nombreJour));
                         message = "ok, À rendre avant le " + pret.getDateRetour();
                     }
                     pret.setRendu(false);

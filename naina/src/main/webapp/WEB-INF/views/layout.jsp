@@ -568,7 +568,9 @@
         <!-- Sidebar -->
         <div class="sidebar" id="sidebar">
             <div class="sidebar-header">
-                <h2>Bibliothek</h2>
+                <h2>Biblio<span style="  font-family: fantasy;          color: transparent;
+            -webkit-text-stroke-width: 0.5px;
+            -webkit-text-stroke-color: black;">tech</span></h2>
                 <p>Système de gestion</p>
             </div>
             
@@ -726,7 +728,7 @@
             </main>
 
             <footer>
-                <p>&copy; 2025 Bibliothèque Naina — Système de gestion universitaire</p>
+                <p>&copy; 2025 Bibliothèque Mr Naina — Système de gestion universitaire</p>
             </footer>
         </div>
     </div>
